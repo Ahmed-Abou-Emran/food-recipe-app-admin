@@ -15,13 +15,14 @@ import { AppLayout, AuthLayout } from "./ui";
 
 const router = createBrowserRouter([
   {
-    path: "/auth",
+    path: "/",
     element: <AuthLayout />,
     errorElement: <NotFound />,
     children: [
-      { path: "/auth/login", element: <Login /> },
-      { path: "/auth/register", element: <Register /> },
-      { path: "/auth/change-password", element: <ChangePassword /> },
+      { index: true, element: <Login /> },
+      { path: "login", element: <Login /> },
+      { path: "/register", element: <Register /> },
+      { path: "/change-password", element: <ChangePassword /> },
     ],
   },
   {
