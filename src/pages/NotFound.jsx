@@ -57,6 +57,7 @@ const Content = styled.div`
     font-weight: 400;
     margin-bottom: var(--spacing-80);
   }
+
   p {
     color: var(--green-950);
     font-size: 1rem;
