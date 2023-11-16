@@ -1,25 +1,77 @@
 import React from "react";
 import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import AuthLogo from "../assets/authLogo.png";
-import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 function Login() {
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    axios
+      .post("http://upskilling-egypt.com:3002/api/v1/Users/Login", data)
+      .then((res) => {
+        console.log(res.data);
+        toast.success("Login Successfully", {
+          position: "top-right",
+        });
+        // const decodedData = JSON.stringify(jwtDecode(res.data.token));
+        localStorage.setItem("adminToken", res.data.token);
+        navigate("/app/home");
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error(`${err.response.data.message}`, {
+          position: "top-right",
+        });
+        console.error(err.response.data.message);
+      });
+  };
+  console.log(errors);
   return (
     <Wrapper>
       <LogoWrapper>
         <img src={AuthLogo} alt="Logo" />
       </LogoWrapper>
-      <FormWrapper>
+      <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <header>
           <h1>Login</h1>
           <p> Welcome Back! Please enter your details</p>
         </header>
         <main>
-          <input type="text" placeholder="Enter your email" />
-          <input type="password" placeholder="Password" />
+          <InputWrapper>
+            <input
+              {...register("email", {
+                required: "This field is required ",
+                pattern: {
+                  value: /^\S+@\S+\.\S+$/,
+                  message: "Invalid email address",
+                },
+              })}
+              type="text"
+              placeholder="Enter your email"
+            />
+            {errors.email && <span>{errors.email.message}</span>}
+          </InputWrapper>
+          <InputWrapper>
+            <input
+              {...register("password", { required: "This field is required" })}
+              type="password"
+              placeholder="Password"
+            />
+            {errors.password && <span>{errors.password.message}</span>}
+          </InputWrapper>
           <button>Login</button>
           <Links>
             <Register to="register">Register Now</Register>
-            <Forget to="forget-password">Forgot Password?</Forget>
+            <Forget to="/forget-password">Forgot Password?</Forget>
           </Links>
         </main>
       </FormWrapper>
@@ -90,7 +142,27 @@ const FormWrapper = styled.form`
   }
 `;
 
-const InputWrapper = styled.div``;
+const InputWrapper = styled.div`
+  width: 100%;
+  position: relative;
+  input {
+    width: 100%;
+    &:focus {
+      outline: 2px solid var(--green-500);
+    }
+  }
+
+  span {
+    position: absolute;
+    right: 3rem;
+    color: #ef4444;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transform: translateY(50%);
+    bottom: 50%;
+  }
+`;
+
 const Links = styled.div`
   display: flex;
   justify-content: space-between;
