@@ -1,12 +1,20 @@
 import React from "react";
 import styled from "styled-components";
-import { get, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import AuthLogo from "../assets/authLogo.png";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { CiLock as Lock } from "react-icons/ci";
+import PasswordInput from "../ui/PasswordInput";
+
 function ChangePassword() {
+  const [passwordsVisibility, setPasswordsVisibility] = React.useState({
+    oldPassword: false,
+    newPassword: false,
+    confirmNewPassword: false,
+  });
   const {
     register,
     handleSubmit,
@@ -40,6 +48,7 @@ function ChangePassword() {
         console.error(err.response.data.message);
       });
   };
+
   console.log(errors);
   return (
     <Wrapper>
@@ -52,40 +61,67 @@ function ChangePassword() {
           <p> Enter your details below</p>
         </header>
         <main>
-          <InputWrapper>
+          <PasswordInput
+            showPassword={passwordsVisibility.oldPassword}
+            togglePassword={() => {
+              setPasswordsVisibility((prev) => ({
+                ...prev,
+                oldPassword: !prev.oldPassword,
+              }));
+            }}
+            error={errors?.oldPassword?.message}
+          >
             <input
               {...register("oldPassword", {
                 required: "This field is required",
               })}
-              type="password"
+              type={passwordsVisibility.oldPassword ? "text" : "password"}
               placeholder="Old Password"
             />
-            {errors.oldPassword && <span>{errors.oldPassword.message}</span>}
-          </InputWrapper>
-          <InputWrapper>
+          </PasswordInput>
+          <PasswordInput
+            showPassword={passwordsVisibility.newPassword}
+            togglePassword={() => {
+              setPasswordsVisibility((prev) => ({
+                ...prev,
+                newPassword: !prev.newPassword,
+              }));
+            }}
+            error={errors?.newPassword?.message}
+          >
             <input
               {...register("newPassword", {
                 required: "This field is required",
               })}
-              type="password"
+              type={passwordsVisibility.newPassword ? "text" : "password"}
               placeholder="New Password"
             />
-            {errors.newPassword && <span>{errors.newPassword.message}</span>}
-          </InputWrapper>
-          <InputWrapper>
+          </PasswordInput>
+
+          <PasswordInput
+            showPassword={passwordsVisibility.confirmNewPassword}
+            togglePassword={() => {
+              setPasswordsVisibility((prev) => ({
+                ...prev,
+                confirmNewPassword: !prev.confirmNewPassword,
+              }));
+            }}
+            error={errors?.confirmNewPassword?.message}
+          >
             <input
               {...register("confirmNewPassword", {
                 required: "This field is required",
                 validate: (value) =>
-                  getValues("newPassword") === value || "Passwords don't match",
+                  value === getValues("newPassword") ||
+                  "The passwords do not match",
               })}
-              type="password"
+              type={
+                passwordsVisibility.confirmNewPassword ? "text" : "password"
+              }
               placeholder="Confirm New Password"
             />
-            {errors.confirmNewPassword && (
-              <span>{errors.confirmNewPassword.message}</span>
-            )}
-          </InputWrapper>
+          </PasswordInput>
+
           <button>Change Password</button>
           <Links>
             <Login to="/login">Login Now?</Login>
@@ -95,120 +131,6 @@ function ChangePassword() {
     </Wrapper>
   );
 }
-
-// function ChangePassword() {
-//   const {
-//     register,
-//     handleSubmit,
-//     formState: { errors },
-//   } = useForm();
-
-//   const onSubmit = (data) => {
-//     console.log(data);
-//     axios
-//       .put(
-//         "http://upskilling-egypt.com:3002/api/v1/Users/ChangePassword",
-//         data,
-//         {
-//           headers: {
-//             Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
-//           },
-//         }
-//       )
-//       .then((response) => {
-//         console.log(data);
-//         navigate("/login"); // Assuming 'navigate' is defined
-//       })
-//       .catch((error) => {
-//         toast(error.response?.data?.message);
-//       });
-//   };
-
-//   return (
-//     <div className="Auth-container container-fluid">
-//       <div className="row bg-overlay vh-100 justify-content-center align-items-center">
-//         <div className="col-md-6">
-//           <div className="bg-white rounded p-3">
-//             <div className="logo-cont text-center">
-//               {/* <img src={logo} alt="logo" /> */}
-//             </div>
-
-//             <form className="w-75 m-auto" onSubmit={handleSubmit(onSubmit)}>
-//               <h2>Change Your Password</h2>
-//               <p>Enter your details below</p>
-
-//               <div className="form-group my-3">
-//                 <input
-//                   placeholder="Old Password"
-//                   className="form-control my-3"
-//                   type="password"
-//                   {...register("oldPassword", {
-//                     required: true,
-//                   })}
-//                 />
-//                 {errors.oldPassword &&
-//                   errors.oldPassword.type === "required" && (
-//                     <span className="text-danger my-1">
-//                       Old password is required
-//                     </span>
-//                   )}
-//               </div>
-
-//               <div className="form-group my-3">
-//                 <input
-//                   placeholder="New Password"
-//                   className="form-control my-3"
-//                   type="password"
-//                   {...register("newPassword", {
-//                     required: true,
-//                   })}
-//                 />
-//                 {errors.newPassword &&
-//                   errors.newPassword.type === "required" && (
-//                     <span className="text-danger my-1">
-//                       New password is required
-//                     </span>
-//                   )}
-//               </div>
-
-//               <div className="form-group my-3">
-//                 <input
-//                   placeholder="Confirm New Password"
-//                   className="form-control my-3"
-//                   type="password"
-//                   {...register("confirmNewPassword", {
-//                     required: true,
-//                   })}
-//                 />
-//                 {errors.confirmNewPassword &&
-//                   errors.confirmNewPassword.type === "required" && (
-//                     <span className="text-danger my-1">
-//                       Confirm new password is required
-//                     </span>
-//                   )}
-//               </div>
-
-//               <div className="d-flex justify-content-between align-items-center">
-//                 <div className="form-check mb-0">
-//                   {/* Assuming this label is not related to the form */}
-//                 </div>
-//                 <a href="#!" className="text-success">
-//                   Forgot password?
-//                 </a>
-//               </div>
-
-//               <div className="form-group my-3">
-//                 <button className="btn btn-success w-100">
-//                   Change Password
-//                 </button>
-//               </div>
-//             </form>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
 
 const Wrapper = styled.div`
   width: clamp(30rem, 65%, 50rem);
@@ -284,6 +206,12 @@ const FormWrapper = styled.form`
 
 const InputWrapper = styled.div`
   width: 100%;
+  display: flex;
+  align-items: center;
+  background: var(--green-100);
+  padding-inline-start: var(--spacing-40);
+  border-radius: 0.5rem;
+  gap: var(--spacing-20);
   position: relative;
   input {
     width: 100%;

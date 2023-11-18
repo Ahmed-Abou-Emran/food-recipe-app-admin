@@ -6,7 +6,11 @@ import { jwtDecode } from "jwt-decode";
 import AuthLogo from "../assets/authLogo.png";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { CiLock as Lock } from "react-icons/ci";
+import { AiOutlineMail as Email } from "react-icons/ai";
+import PasswordInput from "../ui/PasswordInput";
 function Login() {
+  const [passwordVisibility, setPasswordVisibility] = React.useState(false);
   const navigate = useNavigate();
   const {
     register,
@@ -47,6 +51,7 @@ function Login() {
         </header>
         <main>
           <InputWrapper>
+            <Email size="1.5rem" />
             <input
               {...register("email", {
                 required: "This field is required ",
@@ -60,14 +65,19 @@ function Login() {
             />
             {errors.email && <span>{errors.email.message}</span>}
           </InputWrapper>
-          <InputWrapper>
+          <PasswordInput
+            showPassword={passwordVisibility}
+            togglePassword={() => {
+              setPasswordVisibility((prev) => !prev);
+            }}
+            error={errors?.password?.message}
+          >
             <input
               {...register("password", { required: "This field is required" })}
-              type="password"
+              type={passwordVisibility ? "text" : "password"}
               placeholder="Password"
             />
-            {errors.password && <span>{errors.password.message}</span>}
-          </InputWrapper>
+          </PasswordInput>
           <button>Login</button>
           <Links>
             <Register to="register">Register Now</Register>
@@ -144,6 +154,12 @@ const FormWrapper = styled.form`
 
 const InputWrapper = styled.div`
   width: 100%;
+  display: flex;
+  align-items: center;
+  background: var(--green-100);
+  padding-inline-start: var(--spacing-40);
+  border-radius: 0.5rem;
+  gap: var(--spacing-20);
   position: relative;
   input {
     width: 100%;

@@ -5,6 +5,9 @@ import axios from "axios";
 import AuthLogo from "../assets/authLogo.png";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { CiLock as Lock } from "react-icons/ci";
+import { AiOutlineMail as Email } from "react-icons/ai";
+
 function ForgetPassword() {
   const [step, setStep] = React.useState(1);
   const [userInput, setUserInput] = React.useState({
@@ -89,6 +92,7 @@ function ForgetPassword() {
 
           <main>
             <InputWrapper>
+              <Email size="1.5rem" />
               <input
                 {...register("email", {
                   required: "This field is required ",
@@ -116,6 +120,7 @@ function ForgetPassword() {
 
           <main>
             <InputWrapper>
+              <Email size="1.5rem" />
               <input
                 {...register("email", {
                   required: "This field is required ",
@@ -130,6 +135,7 @@ function ForgetPassword() {
               {errors.email && <span>{errors.email.message}</span>}
             </InputWrapper>
             <InputWrapper>
+              <Lock size="1.5rem" />
               <input
                 {...register("seed", {
                   required: "This field is required",
@@ -140,6 +146,7 @@ function ForgetPassword() {
               {errors.oldPassword && <span>{errors.oldPassword.message}</span>}
             </InputWrapper>
             <InputWrapper>
+              <Lock size="1.5rem" />
               <input
                 {...register("password", {
                   required: "This field is required",
@@ -147,9 +154,10 @@ function ForgetPassword() {
                 type="password"
                 placeholder="New Password"
               />
-              {errors.newPassword && <span>{errors.newPassword.message}</span>}
+              {errors.password && <span>{errors.password.message}</span>}
             </InputWrapper>
             <InputWrapper>
+              <Lock size="1.5rem" />
               <input
                 {...register("confirmPassword", {
                   required: "This field is required",
@@ -159,8 +167,8 @@ function ForgetPassword() {
                 type="password"
                 placeholder="Confirm New Password"
               />
-              {errors.confirmNewPassword && (
-                <span>{errors.confirmNewPassword.message}</span>
+              {errors.confirmPassword && (
+                <span>{errors.confirmPassword.message}</span>
               )}
             </InputWrapper>
             <button>Reset Password</button>
@@ -269,12 +277,27 @@ const FormWrapper = styled.form`
 `;
 
 const InputWrapper = styled.div`
+  background: var(--green-100);
   width: 100%;
   position: relative;
+  display: flex;
+  align-items: center;
+
+  gap: var(--spacing-40);
+  padding-inline-start: var(--spacing-40);
+  border-radius: 0.5rem;
   input {
     width: 100%;
     &:focus {
       outline: 2px solid var(--green-500);
+    }
+
+    svg {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--grey-400);
     }
   }
   span {
