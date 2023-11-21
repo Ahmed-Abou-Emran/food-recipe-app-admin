@@ -19,19 +19,6 @@ import { AppLayout, AuthLayout } from "./ui";
 const router = createBrowserRouter([
   {
     path: "/",
-
-    element: <AuthLayout />,
-    errorElement: <NotFound />,
-    children: [
-      { index: true, element: <Login /> },
-      { path: "login", element: <Login /> },
-      { path: "/register", element: <Register /> },
-      { path: "/change-password", element: <ChangePassword /> },
-      { path: "/forget-password", element: <ForgetPassword /> },
-    ],
-  },
-  {
-    path: "/app",
     element: (
       <ProtectedRoute>
         <AppLayout />
@@ -40,10 +27,23 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { index: true, element: <Home /> },
-      { path: "/app/home", element: <Home /> },
-      { path: "/app/users", element: <Users /> },
-      { path: "/app/recipes", element: <Recipes /> },
-      { path: "/app/categories", element: <Categories /> },
+      { path: "/home", element: <Home /> },
+      { path: "/users", element: <Users /> },
+      { path: "/recipes", element: <Recipes /> },
+      { path: "/categories", element: <Categories /> },
+    ],
+  },
+  {
+    path: "/",
+
+    element: <AuthLayout />,
+    errorElement: <NotFound />,
+    children: [
+      { index: true, element: <Login /> },
+      { path: "/login", element: <Login /> },
+      { path: "/register", element: <Register /> },
+      { path: "/change-password", element: <ChangePassword /> },
+      { path: "/forget-password", element: <ForgetPassword /> },
     ],
   },
 ]);

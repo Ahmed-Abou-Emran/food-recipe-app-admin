@@ -6,8 +6,8 @@ import { jwtDecode } from "jwt-decode";
 import AuthLogo from "../assets/authLogo.png";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
-import { CiLock as Lock } from "react-icons/ci";
 import PasswordInput from "../ui/PasswordInput";
+import Loader from "../ui/Loader";
 
 function ChangePassword() {
   const [passwordsVisibility, setPasswordsVisibility] = React.useState({
@@ -15,6 +15,7 @@ function ChangePassword() {
     newPassword: false,
     confirmNewPassword: false,
   });
+  const [loading, setLoading] = React.useState(false);
   const {
     register,
     handleSubmit,
@@ -23,6 +24,7 @@ function ChangePassword() {
   } = useForm();
 
   const onSubmit = (data) => {
+    setLoading(true);
     axios
       .put(
         "http://upskilling-egypt.com:3002/api/v1/Users/ChangePassword",
@@ -39,13 +41,15 @@ function ChangePassword() {
           position: "top-right",
         });
         localStorage.setItem("adminToken", res.data.token);
+        setLoading(false);
       })
       .catch((err) => {
         console.error(err);
-        toast.error(`${err.response.data.message}`, {
+        toast.error(`${err.response.data.message || "Something Went Wrong"}`, {
           position: "top-right",
         });
         console.error(err.response.data.message);
+        setLoading(false);
       });
   };
 
@@ -122,7 +126,10 @@ function ChangePassword() {
             />
           </PasswordInput>
 
-          <button>Change Password</button>
+          <button disabled={loading}>
+            {loading ? <Loader /> : "Change Password"}
+          </button>
+
           <Links>
             <Login to="/login">Login Now?</Login>
           </Links>
@@ -204,31 +211,31 @@ const FormWrapper = styled.form`
   }
 `;
 
-const InputWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  background: var(--green-100);
-  padding-inline-start: var(--spacing-40);
-  border-radius: 0.5rem;
-  gap: var(--spacing-20);
-  position: relative;
-  input {
-    width: 100%;
-    &:focus {
-      outline: 2px solid var(--green-500);
-    }
-  }
-  span {
-    position: absolute;
-    right: 3rem;
-    color: #ef4444;
-    font-size: 0.75rem;
-    font-weight: 500;
-    transform: translateY(50%);
-    bottom: 50%;
-  }
-`;
+// const InputWrapper = styled.div`
+//   width: 100%;
+//   display: flex;
+//   align-items: center;
+//   background: var(--green-100);
+//   padding-inline-start: var(--spacing-40);
+//   border-radius: 0.5rem;
+//   gap: var(--spacing-20);
+//   position: relative;
+//   input {
+//     width: 100%;
+//     &:focus {
+//       outline: 2px solid var(--green-500);
+//     }
+//   }
+//   span {
+//     position: absolute;
+//     right: 3rem;
+//     color: #ef4444;
+//     font-size: 0.75rem;
+//     font-weight: 500;
+//     transform: translateY(50%);
+//     bottom: 50%;
+//   }
+// `;
 const Links = styled.div`
   display: flex;
   justify-content: flex-end;

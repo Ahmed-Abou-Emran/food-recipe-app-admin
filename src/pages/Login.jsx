@@ -8,8 +8,10 @@ import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { CiLock as Lock } from "react-icons/ci";
 import { AiOutlineMail as Email } from "react-icons/ai";
+import Loader from "../ui/Loader";
 import PasswordInput from "../ui/PasswordInput";
 function Login() {
+  const [loading, setLoading] = React.useState(false);
   const [passwordVisibility, setPasswordVisibility] = React.useState(false);
   const navigate = useNavigate();
   const {
@@ -19,6 +21,7 @@ function Login() {
   } = useForm();
 
   const onSubmit = (data) => {
+    setLoading(true);
     axios
       .post("http://upskilling-egypt.com:3002/api/v1/Users/Login", data)
       .then((res) => {
@@ -28,7 +31,8 @@ function Login() {
         });
         // const decodedData = JSON.stringify(jwtDecode(res.data.token));
         localStorage.setItem("adminToken", res.data.token);
-        navigate("/app/home");
+        setLoading(false);
+        navigate("/home");
       })
       .catch((err) => {
         console.error(err);
@@ -36,8 +40,16 @@ function Login() {
           position: "top-right",
         });
         console.error(err.response.data.message);
+        setLoading(false);
       });
   };
+
+  React.useEffect(() => {
+    if (localStorage.getItem("adminToken")) {
+      navigate("/home");
+    }
+  }, [navigate]);
+
   console.log(errors);
   return (
     <Wrapper>
@@ -78,7 +90,7 @@ function Login() {
               placeholder="Password"
             />
           </PasswordInput>
-          <button>Login</button>
+          <button disabled={loading}>{loading ? <Loader /> : "Login"}</button>
           <Links>
             <Register to="register">Register Now</Register>
             <Forget to="/forget-password">Forgot Password?</Forget>

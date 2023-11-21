@@ -1,18 +1,26 @@
 import React from "react";
 import styled from "styled-components";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import AuthLogo from "../assets/authLogo.png";
 import { toast } from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { CiLock as Lock } from "react-icons/ci";
 import { AiOutlineMail as Email } from "react-icons/ai";
+import { PasswordInput } from "../ui";
+import Loader from "../ui/Loader";
 
 function ForgetPassword() {
-  const [step, setStep] = React.useState(1);
+  let [searchParams, setSearchParams] = useSearchParams({ step: 1 });
+  const [passwordsVisibility, setPasswordsVisibility] = React.useState({
+    password: false,
+    confirmPassword: false,
+  });
+  const [step, setStep] = React.useState(() => +searchParams.get("step") || 1);
+  const [loading, setLoading] = React.useState(false);
   const [userInput, setUserInput] = React.useState({
     email: "",
-    otp: "",
+    seed: "",
     newPassword: "",
     confirmNewPassword: "",
   });
@@ -24,22 +32,21 @@ function ForgetPassword() {
     getValues,
   } = useForm();
 
+  getValues();
   const onStepHandler = (step) => {
     setStep(step);
     setUserInput({ userInput, ...getValues() });
+    setSearchParams({ step });
+    console.log(searchParams.get("step"));
   };
   const onSubmit = (data) => {
+    setLoading(true);
     axios
       .post(
         `http://upskilling-egypt.com:3002/api/v1/Users/Reset/${
           step === 1 ? "Request" : ""
         }`,
         data
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
-        //   },
-        // }
       )
       .then((res) => {
         console.log(res.data);
@@ -53,7 +60,12 @@ function ForgetPassword() {
             position: "top-right",
           }
         );
-        localStorage.setItem("adminToken", res.data.token);
+        setLoading(false);
+        if (step === 1) {
+          onStepHandler(2);
+        } else {
+          // useNavigate("/login");
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -61,8 +73,11 @@ function ForgetPassword() {
           position: "top-right",
         });
         console.error(err.response.data.message);
+        setLoading(false);
       });
   };
+
+  console.log(getValues());
   console.log(errors);
   return (
     <Wrapper>
@@ -83,7 +98,8 @@ function ForgetPassword() {
           2
         </Step>
       </Steps>
-      {step === 1 && (
+      {+searchParams.get("step") === 1 && (
+        // {step === 1 && (
         <FormWrapper onSubmit={handleSubmit(onSubmit)}>
           <header>
             <h1>Reset Password</h1>
@@ -106,12 +122,13 @@ function ForgetPassword() {
               />
               {errors.email && <span>{errors.email.message}</span>}
             </InputWrapper>
-            <button>Send</button>
+            <button disabled={loading}>{loading ? <Loader /> : "Send"}</button>
           </main>
         </FormWrapper>
       )}
 
-      {step === 2 && (
+      {+searchParams.get("step") === 2 && (
+        // {step === 2 && (
         <FormWrapper onSubmit={handleSubmit(onSubmit)}>
           <header>
             <h1>Request Reset Password</h1>
@@ -143,34 +160,52 @@ function ForgetPassword() {
                 type="text"
                 placeholder="OTP"
               />
-              {errors.oldPassword && <span>{errors.oldPassword.message}</span>}
+              {errors.seed && <span>{errors.seed.message}</span>}
             </InputWrapper>
-            <InputWrapper>
-              <Lock size="1.5rem" />
+            <PasswordInput
+              error={errors?.password?.message}
+              showPassword={passwordsVisibility.password}
+              togglePassword={() => {
+                setPasswordsVisibility((prev) => ({
+                  ...prev,
+                  password: !prev.password,
+                }));
+              }}
+            >
               <input
                 {...register("password", {
                   required: "This field is required",
                 })}
-                type="password"
+                type={passwordsVisibility.password ? "text" : "password"}
                 placeholder="New Password"
               />
-              {errors.password && <span>{errors.password.message}</span>}
-            </InputWrapper>
-            <InputWrapper>
-              <Lock size="1.5rem" />
+            </PasswordInput>
+            <PasswordInput
+              error={errors?.confirmPassword?.message}
+              showPassword={passwordsVisibility.confirmPassword}
+              togglePassword={() => {
+                setPasswordsVisibility((prev) => ({
+                  ...prev,
+                  confirmPassword: !prev.confirmPassword,
+                }));
+              }}
+            >
               <input
                 {...register("confirmPassword", {
                   required: "This field is required",
                   validate: (value) =>
                     getValues("password") === value || "Passwords don't match",
+                  pattern: {
+                    value:
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+                    message:
+                      " Password must be at least 6 characters, including UPPER/lowercase, numbers and special characters",
+                  },
                 })}
-                type="password"
+                type={passwordsVisibility.password ? "text" : "password"}
                 placeholder="Confirm New Password"
               />
-              {errors.confirmPassword && (
-                <span>{errors.confirmPassword.message}</span>
-              )}
-            </InputWrapper>
+            </PasswordInput>
             <button>Reset Password</button>
           </main>
         </FormWrapper>
@@ -244,7 +279,7 @@ const FormWrapper = styled.form`
   main {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-60);
+    gap: var(--spacing-70);
     width: 100%;
 
     input {
@@ -257,6 +292,7 @@ const FormWrapper = styled.form`
 
     button {
       padding-block: var(--spacing-30);
+      margin-block: var(--spacing-30);
       background-color: var(--green-500);
       color: var(--grey-100);
       border: none;
@@ -302,12 +338,11 @@ const InputWrapper = styled.div`
   }
   span {
     position: absolute;
-    right: 3rem;
     color: #ef4444;
     font-size: 0.75rem;
     font-weight: 500;
-    transform: translateY(50%);
-    bottom: 50%;
+    bottom: -5px;
+    transform: translateY(100%);
   }
 `;
 
