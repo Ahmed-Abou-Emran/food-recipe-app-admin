@@ -2,6 +2,7 @@ import "./App.css";
 import React from "react";
 import { Toaster } from "react-hot-toast";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import UserProvider from "./features/UserProvider";
 import {
   Login,
   Register,
@@ -13,6 +14,7 @@ import {
   Recipes,
   Categories,
 } from "./pages";
+import UsersProvider from "./pages/Users/UsersProvider";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import { AppLayout, AuthLayout } from "./ui";
 
@@ -28,9 +30,17 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "/home", element: <Home /> },
-      { path: "/users", element: <Users /> },
+      {
+        path: "/users",
+        element: (
+          <UsersProvider>
+            <Users />
+          </UsersProvider>
+        ),
+      },
       { path: "/recipes", element: <Recipes /> },
       { path: "/categories", element: <Categories /> },
+      // { path: "/change-password", element: <ChangePassword /> },
     ],
   },
   {
@@ -51,8 +61,10 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <Toaster />
-      <RouterProvider router={router} />
+      <Toaster position="top right" />
+      <UserProvider>
+        <RouterProvider router={router} />
+      </UserProvider>
     </>
   );
 }
