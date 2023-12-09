@@ -7,9 +7,10 @@ import {
   DeleteCategoryDialog,
   UpdateCategoryDialog,
 } from "./CategoriesDialogs";
-import { useUpdateParams, useCategories } from "./CategoriesProvider";
+import { useCategories, useUpdateParams } from "./hooks";
+
 function Categories() {
-  const { categories, totalNumberOfPages } = useCategories();
+  const { categories, totalNumberOfPages, refetchCategories } = useCategories();
   const [params, updateParams] = useUpdateParams();
 
   const [openAdd, setOpenAdd] = React.useState(false);
@@ -28,6 +29,9 @@ function Categories() {
     updateParams({ name: e.target.value });
   };
 
+  React.useEffect(() => {
+    refetchCategories();
+  }, [openAdd, openEdit]);
   return (
     <Wrapper>
       <AddNewItemWrapper>
@@ -56,6 +60,7 @@ function Categories() {
         </Header>
         <Body>
           <UpdateCategoryDialog
+            refetchCategories={refetchCategories}
             key={currentCategory?.id}
             open={openEdit}
             setOpen={setOpenEdit}
@@ -69,7 +74,11 @@ function Categories() {
                 <ActionTrigger onClick={() => onEditHandler(id)}>
                   <Edit />
                 </ActionTrigger>
-                <DeleteCategoryDialog id={id} name={name} />
+                <DeleteCategoryDialog
+                  refetchCategories={refetchCategories}
+                  id={id}
+                  name={name}
+                />
               </ActionsWrapper>
             </Row>
           ))}

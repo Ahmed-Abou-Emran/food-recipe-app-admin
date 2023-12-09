@@ -5,9 +5,8 @@ import { toast } from "react-hot-toast";
 import styled from "styled-components";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { useCategories } from "./CategoriesProvider";
-export const DeleteCategoryDialog = ({ id }) => {
-  const { refetchCategories } = useCategories();
+import { useCategories } from "./hooks";
+export const DeleteCategoryDialog = ({ id, refetchCategories }) => {
   const [open, setOpen] = React.useState(false);
 
   const deleteHandler = () => {
@@ -45,7 +44,6 @@ export const DeleteCategoryDialog = ({ id }) => {
 };
 
 export const AddCategoryDialog = ({ open, setOpen }) => {
-  const { refetchCategories } = useCategories();
   const {
     register,
     handleSubmit,
@@ -64,7 +62,6 @@ export const AddCategoryDialog = ({ open, setOpen }) => {
           response?.data?.data?.message || "Category Added Successfully"
         );
         setOpen(false);
-        refetchCategories();
         console.log(response);
       })
       .catch((error) => {
@@ -101,7 +98,6 @@ export const AddCategoryDialog = ({ open, setOpen }) => {
 
 export const UpdateCategoryDialog = ({ open, setOpen, id, name }) => {
   // const [open, setOpen] = React.useState(false);
-  const { refetchCategories } = useCategories();
 
   const {
     register,
@@ -121,7 +117,6 @@ export const UpdateCategoryDialog = ({ open, setOpen, id, name }) => {
           response?.data?.data?.message || "Category Updated Successfully"
         );
         setOpen(false);
-        refetchCategories();
         console.log(response);
       })
       .catch((error) => {
