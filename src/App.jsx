@@ -15,6 +15,7 @@ import {
   Categories,
 } from "./pages";
 import UsersProvider from "./pages/Users/UsersProvider";
+import CategoriesProvider from "./pages/Categories/CategoriesProvider";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import { AppLayout, AuthLayout } from "./ui";
 
@@ -39,7 +40,14 @@ const router = createBrowserRouter([
         ),
       },
       { path: "/recipes", element: <Recipes /> },
-      { path: "/categories", element: <Categories /> },
+      {
+        path: "/categories",
+        element: (
+          <CategoriesProvider>
+            <Categories />
+          </CategoriesProvider>
+        ),
+      },
       // { path: "/change-password", element: <ChangePassword /> },
     ],
   },
