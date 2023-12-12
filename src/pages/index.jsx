@@ -7,6 +7,7 @@ import Home from "./Home";
 import Users from "./Users";
 import Recipes from "./recipes";
 import Categories from "./Categories";
+import UserProvider from "./UserProvider";
 
 export {
   Register,
@@ -18,4 +19,5 @@ export {
   Recipes,
   Categories,
   ForgetPassword,
+  UserProvider,
 };

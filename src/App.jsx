@@ -2,7 +2,7 @@ import "./App.css";
 import React from "react";
 import { Toaster } from "react-hot-toast";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import UserProvider from "./features/UserProvider";
+import {UserProvider} from "./pages/";
 import {
   Login,
   Register,
