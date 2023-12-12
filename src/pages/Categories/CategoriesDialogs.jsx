@@ -43,7 +43,7 @@ export const DeleteCategoryDialog = ({ id, refetchCategories }) => {
   );
 };
 
-export const AddCategoryDialog = ({ open, setOpen }) => {
+export const AddCategoryDialog = ({ open, setOpen, refetchCategories }) => {
   const {
     register,
     handleSubmit,
@@ -62,6 +62,7 @@ export const AddCategoryDialog = ({ open, setOpen }) => {
           response?.data?.data?.message || "Category Added Successfully"
         );
         setOpen(false);
+        refetchCategories();
         console.log(response);
       })
       .catch((error) => {
@@ -96,7 +97,13 @@ export const AddCategoryDialog = ({ open, setOpen }) => {
   );
 };
 
-export const UpdateCategoryDialog = ({ open, setOpen, id, name }) => {
+export const UpdateCategoryDialog = ({
+  open,
+  setOpen,
+  id,
+  name,
+  refetchCategories,
+}) => {
   // const [open, setOpen] = React.useState(false);
 
   const {
@@ -116,6 +123,7 @@ export const UpdateCategoryDialog = ({ open, setOpen, id, name }) => {
         toast.success(
           response?.data?.data?.message || "Category Updated Successfully"
         );
+        refetchCategories();
         setOpen(false);
         console.log(response);
       })

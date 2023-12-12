@@ -29,9 +29,6 @@ function Categories() {
     updateParams({ name: e.target.value });
   };
 
-  React.useEffect(() => {
-    refetchCategories();
-  }, [openAdd, openEdit]);
   return (
     <Wrapper>
       <AddNewItemWrapper>
@@ -43,7 +40,11 @@ function Categories() {
           <AddButton onClick={() => setOpenAdd(true)}>
             Add New Category
           </AddButton>
-          <AddCategoryDialog open={openAdd} setOpen={setOpenAdd} />
+          <AddCategoryDialog
+            refetchCategories={refetchCategories}
+            open={openAdd}
+            setOpen={setOpenAdd}
+          />
         </Right>
       </AddNewItemWrapper>
       <SearchControls>
