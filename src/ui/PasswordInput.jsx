@@ -37,8 +37,10 @@ const InputWrapper = styled.div`
   border-radius: 0.5rem;
   gap: var(--spacing-20);
   position: relative;
+  margin-block-end: var(--spacing-30);
   input {
     width: 100%;
+    position: relative;
     &:focus {
       outline: 2px solid var(--green-500);
     }
@@ -46,12 +48,11 @@ const InputWrapper = styled.div`
 
   span {
     position: absolute;
-    right: 3rem;
     color: #ef4444;
     font-size: 0.75rem;
     font-weight: 500;
-    transform: translateY(50%);
-    bottom: 50%;
+    bottom: -5px;
+    transform: translateY(100%);
   }
 `;
 const TogglePassword = styled.button`
@@ -67,6 +68,11 @@ const TogglePassword = styled.button`
   &:hover {
     cursor: pointer;
   }
+
+  &:focus {
+    outline: 2px solid var(--green-500);
+  }
+
   svg {
     color: var(--green-800);
   }
