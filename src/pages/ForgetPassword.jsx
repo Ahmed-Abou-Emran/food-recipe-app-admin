@@ -43,7 +43,7 @@ function ForgetPassword() {
     setLoading(true);
     axios
       .post(
-        `http://upskilling-egypt.com:3002/api/v1/Users/Reset/${
+        `https://upskilling-egypt.com/api/v1/Users/Reset/${
           step === 1 ? "Request" : ""
         }`,
         data
@@ -297,7 +297,7 @@ const FormWrapper = styled.form`
       color: var(--grey-100);
       border: none;
       border-radius: 0.5rem;
-
+      text-align: center;
       font-family: Inter;
       font-size: 1.25rem;
       font-weight: 700;

@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 import AuthLogo from "../assets/authLogo.png";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
@@ -23,7 +22,7 @@ function Login() {
   const onSubmit = (data) => {
     setLoading(true);
     axios
-      .post("http://upskilling-egypt.com:3002/api/v1/Users/Login", data)
+      .post("https://upskilling-egypt.com/api/v1/Users/Login", data)
       .then((res) => {
         console.log(res.data);
         toast.success("Login Successfully", {
@@ -139,6 +138,7 @@ const FormWrapper = styled.form`
       padding-inline: var(--spacing-40);
       padding-block: var(--spacing-30);
       background: var(--green-100);
+
       border: none;
       border-radius: 0.5rem;
     }
@@ -149,7 +149,7 @@ const FormWrapper = styled.form`
       color: var(--grey-100);
       border: none;
       border-radius: 0.5rem;
-
+      text-align: center;
       font-family: Inter;
       font-size: 1.25rem;
       font-weight: 700;
@@ -173,6 +173,7 @@ const InputWrapper = styled.div`
   border-radius: 0.5rem;
   gap: var(--spacing-20);
   position: relative;
+  margin-block-end: var(--spacing-30);
   input {
     width: 100%;
     &:focus {
@@ -182,12 +183,11 @@ const InputWrapper = styled.div`
 
   span {
     position: absolute;
-    right: 3rem;
     color: #ef4444;
     font-size: 0.75rem;
     font-weight: 500;
-    transform: translateY(50%);
-    bottom: 50%;
+    bottom: -5px;
+    transform: translateY(100%);
   }
 `;
 

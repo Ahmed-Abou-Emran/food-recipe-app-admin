@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 import AuthLogo from "../assets/authLogo.png";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
@@ -26,15 +25,11 @@ function ChangePassword() {
   const onSubmit = (data) => {
     setLoading(true);
     axios
-      .put(
-        "http://upskilling-egypt.com:3002/api/v1/Users/ChangePassword",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
-          },
-        }
-      )
+      .put("https://upskilling-egypt.com/api/v1/Users/ChangePassword", data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         toast.success("Password Changed Successfully", {
@@ -191,6 +186,7 @@ const FormWrapper = styled.form`
     }
 
     button {
+      text-align: center;
       padding-block: var(--spacing-30);
       background-color: var(--green-500);
       color: var(--grey-100);

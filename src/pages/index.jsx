@@ -1,11 +1,11 @@
-import Register from "./Register.jsx";
-import Login from "./Login.jsx";
-import ChangePassword from "./ChangePassword.jsx";
-import ForgetPassword from "./ForgetPassword.jsx";
-import NotFound from "./NotFound.jsx";
-import Home from "./Home.jsx";
-import Users from "./Users.jsx";
-import Recipes from "./Recipes.jsx";
+import Register from "./Register";
+import Login from "./Login";
+import ChangePassword from "./ChangePassword";
+import ForgetPassword from "./ForgetPassword";
+import NotFound from "./NotFound";
+import Home from "./Home";
+import Users from "./Users";
+import Recipes from "./recipes";
 import Categories from "./Categories";
 
 export {

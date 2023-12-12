@@ -1,6 +1,7 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
-import NotFoundBackground from "../assets/notFound.png";
+// import NotFoundBackground from "../assets/notFound.png";
+import { NotFound as NotFoundBackground } from "../assets";
 import Logo from "../assets/AuthLogo.png";
 import { Link } from "react-router-dom";
 function NotFound() {
@@ -19,7 +20,7 @@ function NotFound() {
             This Page doesn’t exist or was removed! We suggest you back to home.
           </p>
 
-          <Link to="/app/home"> &larr; Back to Home</Link>
+          <Link to="/home"> &larr; Back to Home</Link>
         </Content>
       </ContentWrapper>
       <ImageWrapper>
