@@ -18,13 +18,20 @@ import UsersProvider from "./pages/Users/UsersProvider";
 import CategoriesProvider from "./pages/Categories/CategoriesProvider";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import { AppLayout, AuthLayout } from "./ui";
+import RecipesProvider from "./pages/Recipes/RecipesProvider";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <ProtectedRoute>
-        <AppLayout />
+        <UsersProvider>
+          <RecipesProvider>
+            <CategoriesProvider>
+              <AppLayout />
+            </CategoriesProvider>
+          </RecipesProvider>
+        </UsersProvider>
       </ProtectedRoute>
     ),
     errorElement: <NotFound />,
@@ -33,20 +40,15 @@ const router = createBrowserRouter([
       { path: "/home", element: <Home /> },
       {
         path: "/users",
-        element: (
-          <UsersProvider>
-            <Users />
-          </UsersProvider>
-        ),
+        element: <Users />,
       },
-      { path: "/recipes", element: <Recipes /> },
+      {
+        path: "/recipes",
+        element: <Recipes />,
+      },
       {
         path: "/categories",
-        element: (
-          <CategoriesProvider>
-            <Categories />
-          </CategoriesProvider>
-        ),
+        element: <Categories />,
       },
       // { path: "/change-password", element: <ChangePassword /> },
     ],
