@@ -6,16 +6,17 @@ import axios from "axios";
 export const UsersContext = React.createContext();
 
 const UsersProvider = ({ children }) => {
-  let [searchParams, setSearchParams] = useSearchParams();
-
-  console.log([...searchParams]);
+  const [users, setUsers] = React.useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [params, setParams] = React.useState({
     pageSize: searchParams.get("pageSize") || 5,
     pageNumber: searchParams.get("pageNumber") || 1,
     userName: searchParams.get("userName") || "",
     groups: searchParams.get("groups") || "",
   });
-  const [users, setUsers] = React.useState([]);
+
+  console.log(searchParams);
+  console.log([...searchParams]);
 
   const updateParams = ({
     userName = params.userName,

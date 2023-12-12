@@ -29,10 +29,9 @@ function Users() {
           value={params?.groups}
           onChange={(e) => updateParams({ groups: e.target.value })}
         >
-          <option value="">Select Role</option>
+          <option value="">All Roles</option>
           <option value="1">Super Admin</option>
           <option value="2">System User</option>
-          <option value="">All</option>
         </SelectRole>
       </SearchControls>
       <Table>
@@ -159,8 +158,12 @@ const SelectRole = styled.select`
     outline-offset: 2px;
   }
 `;
-const Table = styled.div``;
+const Table = styled.div`
+  position: relative;
+`;
 const Header = styled.div`
+  position: sticky;
+  top: 5px;
   background: var(--green-200);
   padding-inline: var(--spacing-160);
   padding-block: var(--spacing-80);
