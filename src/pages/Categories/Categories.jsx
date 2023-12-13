@@ -13,9 +13,15 @@ import {
   UpdateCategoryDialog,
 } from "./CategoriesDialogs";
 import { useCategories, useUpdateParams } from "./hooks";
+import { Loader, NoData } from "../../ui";
 
 function Categories() {
-  const { categories, totalNumberOfPages, refetchCategories } = useCategories();
+  const {
+    categories,
+    totalNumberOfPages,
+    refetchCategories,
+    isLoading: isLoadingCategories,
+  } = useCategories();
   const [params, updateParams] = useUpdateParams();
 
   const [openAdd, setOpenAdd] = React.useState(false);
@@ -75,21 +81,26 @@ function Categories() {
             id={currentCategory?.id}
             name={currentCategory?.name}
           />
-          {categories.map(({ id, name }) => (
-            <Row key={id}>
-              <span>{name}</span>
-              <ActionsWrapper>
-                <ActionTrigger onClick={() => onEditHandler(id)}>
-                  <Edit />
-                </ActionTrigger>
-                <DeleteCategoryDialog
-                  refetchCategories={refetchCategories}
-                  id={id}
-                  name={name}
-                />
-              </ActionsWrapper>
-            </Row>
-          ))}
+
+          {isLoadingCategories && <Loader />}
+          {!isLoadingCategories && categories.length == 0 && <NoData />}
+          {!isLoadingCategories &&
+            categories.length > 0 &&
+            categories.map(({ id, name }) => (
+              <Row key={id}>
+                <span>{name}</span>
+                <ActionsWrapper>
+                  <ActionTrigger onClick={() => onEditHandler(id)}>
+                    <Edit />
+                  </ActionTrigger>
+                  <DeleteCategoryDialog
+                    refetchCategories={refetchCategories}
+                    id={id}
+                    name={name}
+                  />
+                </ActionsWrapper>
+              </Row>
+            ))}
         </Body>
         <Footer>
           <Pagination>
@@ -242,6 +253,8 @@ const SearchInput = styled.input`
 
 const Table = styled.div``;
 const Header = styled.div`
+  position: sticky;
+  top: 0;
   background: var(--green-200);
   padding-inline: var(--spacing-160);
   padding-block: var(--spacing-80);
@@ -291,6 +304,7 @@ const PageSize = styled.input`
   }
 `;
 const Page = styled.button`
+  min-height: 2rem;
   color: var(--grey-100);
   padding-inline: 0.5rem;
 

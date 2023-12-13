@@ -9,6 +9,7 @@ export const useUpdateParams = () => {
 };
 
 export const useRecipes = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const { params, updateParams, recipes, setRecipes } =
     React.useContext(RecipesContext);
   const [totalNumberOfPages, setTotalNumberOfPages] = React.useState();
@@ -17,6 +18,7 @@ export const useRecipes = () => {
   };
   React.useEffect(() => {
     const getRecipes = () => {
+      setIsLoading(true);
       axios
         .get(`${recipesURL}`, {
           headers: {
@@ -33,6 +35,9 @@ export const useRecipes = () => {
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     };
 
@@ -43,7 +48,7 @@ export const useRecipes = () => {
     return () => clearTimeout(timerId);
   }, [params]);
 
-  return { recipes, totalNumberOfPages, refetchRecipes };
+  return { recipes, totalNumberOfPages, refetchRecipes, isLoading };
 };
 
 export const useTags = () => {

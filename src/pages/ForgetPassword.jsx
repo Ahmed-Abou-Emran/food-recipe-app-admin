@@ -11,13 +11,13 @@ import { PasswordInput } from "../ui";
 import Loader from "../ui/Loader";
 
 function ForgetPassword() {
+  const [isLoading, setIsLoading] = React.useState(false);
   let [searchParams, setSearchParams] = useSearchParams({ step: 1 });
   const [passwordsVisibility, setPasswordsVisibility] = React.useState({
     password: false,
     confirmPassword: false,
   });
   const [step, setStep] = React.useState(() => +searchParams.get("step") || 1);
-  const [loading, setLoading] = React.useState(false);
   const [userInput, setUserInput] = React.useState({
     email: "",
     seed: "",
@@ -40,7 +40,7 @@ function ForgetPassword() {
     console.log(searchParams.get("step"));
   };
   const onSubmit = (data) => {
-    setLoading(true);
+    setIsLoading(true);
     axios
       .post(
         `https://upskilling-egypt.com/api/v1/Users/Reset/${
@@ -60,7 +60,6 @@ function ForgetPassword() {
             position: "top-right",
           }
         );
-        setLoading(false);
         if (step === 1) {
           onStepHandler(2);
         } else {
@@ -73,8 +72,8 @@ function ForgetPassword() {
           position: "top-right",
         });
         console.error(err.response.data.message);
-        setLoading(false);
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   console.log(getValues());
@@ -122,7 +121,9 @@ function ForgetPassword() {
               />
               {errors.email && <span>{errors.email.message}</span>}
             </InputWrapper>
-            <button disabled={loading}>{loading ? <Loader /> : "Send"}</button>
+            <button disabled={isLoading}>
+              {isLoading ? "Loading..." : "Send"}
+            </button>
           </main>
         </FormWrapper>
       )}
@@ -206,7 +207,9 @@ function ForgetPassword() {
                 placeholder="Confirm New Password"
               />
             </PasswordInput>
-            <button>Reset Password</button>
+            <button disabled={isLoading}>
+              {isLoading ? "Loading..." : "Reset Password"}
+            </button>
           </main>
         </FormWrapper>
       )}
@@ -307,6 +310,9 @@ const FormWrapper = styled.form`
         cursor: pointer;
       }
 
+      &:disabled {
+        cursor: not-allowed;
+      }
       transition: background-color 0.2s ease-in-out;
     }
   }

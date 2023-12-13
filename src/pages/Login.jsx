@@ -89,7 +89,9 @@ function Login() {
               placeholder="Password"
             />
           </PasswordInput>
-          <button disabled={loading}>{loading ? <Loader /> : "Login"}</button>
+          <button disabled={loading}>
+            {loading ? "Loading ..." : "Login"}
+          </button>
           <Links>
             <Register to="register">Register Now</Register>
             <Forget to="/forget-password">Forgot Password?</Forget>
@@ -157,6 +159,10 @@ const FormWrapper = styled.form`
       &:hover {
         background-color: var(--green-600);
         cursor: pointer;
+      }
+
+      &:disabled {
+        cursor: not-allowed;
       }
 
       transition: background-color 0.2s ease-in-out;

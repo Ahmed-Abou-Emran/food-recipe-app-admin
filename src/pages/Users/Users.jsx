@@ -11,11 +11,15 @@ import styled from "styled-components";
 import { DeleteUserDialog, ViewUserDialog } from "./UsersDialogs";
 import { useUpdateParams, useUsers } from "./UsersProvider";
 import { range } from "../../utils/helpers";
-import { NoData } from "../../ui";
-
+import { NoData, Loader } from "../../ui";
 function Users() {
   const [params, updateParams] = useUpdateParams();
-  const { users, totalNumberOfPages, refetchUsers } = useUsers();
+  const {
+    users,
+    totalNumberOfPages,
+    refetchUsers,
+    isLoading: isLoadingUsers,
+  } = useUsers();
   return (
     <Wrapper>
       <AddNewItemWrapper>
@@ -50,41 +54,44 @@ function Users() {
           <div>Role</div>
           <div>Actions</div>
         </Header>
-        {users.length > 0 && (
+        {
           <Body>
-            {users.map((user) => (
-              <Row key={user.id}>
-                <ImageWrapper>
-                  {user.imagePath ? (
-                    <img
-                      src={`https://upskilling-egypt.com/${user.imagePath}`}
-                    />
-                  ) : (
-                    <RegularUser />
-                  )}
-                </ImageWrapper>
-                <div>{user.userName}</div>
-                <div>
-                  {user.group.name == "SystemUser"
-                    ? "System User"
-                    : "Super Admin"}
-                </div>
-                <ActionsWrapper>
-                  <ViewUserDialog user={user} />
-                  {user.group.name === "SystemUser" ? (
-                    <DeleteUserDialog
-                      refetchUsers={refetchUsers}
-                      id={user.id}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </ActionsWrapper>
-              </Row>
-            ))}
+            {isLoadingUsers && <Loader />}
+            {!isLoadingUsers && users.length == 0 && <NoData />}
+            {!isLoadingUsers &&
+              users.length > 0 &&
+              users.map((user) => (
+                <Row key={user.id}>
+                  <ImageWrapper>
+                    {user.imagePath ? (
+                      <img
+                        src={`https://upskilling-egypt.com/${user.imagePath}`}
+                      />
+                    ) : (
+                      <RegularUser />
+                    )}
+                  </ImageWrapper>
+                  <div>{user.userName}</div>
+                  <div>
+                    {user.group.name == "SystemUser"
+                      ? "System User"
+                      : "Super Admin"}
+                  </div>
+                  <ActionsWrapper>
+                    <ViewUserDialog user={user} />
+                    {user.group.name === "SystemUser" ? (
+                      <DeleteUserDialog
+                        refetchUsers={refetchUsers}
+                        id={user.id}
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </ActionsWrapper>
+                </Row>
+              ))}
           </Body>
-        )}
-        {users.length == 0 && <NoData />}
+        }
         <Footer>
           <Pagination>
             <Page
@@ -284,6 +291,7 @@ const PageSize = styled.input`
   }
 `;
 const Page = styled.button`
+  min-height: 2rem;
   color: var(--grey-100);
   padding-inline: 0.5rem;
 

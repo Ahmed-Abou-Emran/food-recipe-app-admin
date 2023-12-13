@@ -41,8 +41,6 @@ const ChangePasswordDialog = ({ open, setOpen }) => {
           position: "top-right",
         });
         setOpen(false);
-        // localStorage.setItem("adminToken", res.data.token);
-        setLoading(false);
       })
       .catch((err) => {
         console.error(err);
@@ -50,8 +48,8 @@ const ChangePasswordDialog = ({ open, setOpen }) => {
           position: "top-right",
         });
         console.error(err.response.data.message);
-        setLoading(false);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   console.log(errors);
@@ -129,7 +127,7 @@ const ChangePasswordDialog = ({ open, setOpen }) => {
             </PasswordInput>
 
             <button disabled={loading}>
-              {loading ? <Loader /> : "Change Password"}
+              {loading ? "Loading..." : "Change Password"}
             </button>
 
             <Links>
@@ -207,6 +205,10 @@ const FormWrapper = styled.form`
       &:hover {
         background-color: var(--green-600);
         cursor: pointer;
+      }
+
+      &:disabled {
+        cursor: not-allowed;
       }
 
       transition: background-color 0.2s ease-in-out;

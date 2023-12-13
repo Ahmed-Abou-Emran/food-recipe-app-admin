@@ -44,11 +44,13 @@ export const useUpdateParams = () => {
 };
 
 export const useUsers = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const { updateParams, params, users, setUsers } =
     React.useContext(UsersContext);
   const [totalNumberOfPages, setTotalNumberOfPages] = React.useState();
 
   const getUsers = () => {
+    setIsLoading(true);
     axios
       .get(`${usersURL}`, {
         headers: {
@@ -66,6 +68,9 @@ export const useUsers = () => {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
   const refetchUsers = () => {
@@ -74,6 +79,6 @@ export const useUsers = () => {
   React.useEffect(() => {
     getUsers();
   }, [params]);
-  return { users, totalNumberOfPages, refetchUsers };
+  return { users, totalNumberOfPages, refetchUsers, isLoading };
 };
 export default UsersProvider;

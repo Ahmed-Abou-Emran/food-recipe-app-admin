@@ -15,9 +15,15 @@ import {
   DeleteRecipeDialog,
   UpdateRecipeDialog,
 } from "./RecipesDialogs";
+import { NoData, Loader } from "../../ui";
 
 function Recipes() {
-  const { recipes, totalNumberOfPages, refetchRecipes } = useRecipes();
+  const {
+    recipes,
+    totalNumberOfPages,
+    refetchRecipes,
+    isLoading: isLoadingRecipes,
+  } = useRecipes();
   const { categories } = useCategories();
   const [tags] = useTags();
   const [params, updateParams] = useUpdateParams();
@@ -99,32 +105,39 @@ function Recipes() {
               recipe={{ ...currentRecipe }}
             />
           )}
-          {recipes.map((recipe) => {
-            const { id, name, description, price, imagePath, category, tag } =
-              recipe;
-            return (
-              <Row key={id}>
-                <div>{name}</div>
-                <ImageWrapper>
-                  {imagePath ? (
-                    <img src={`https://upskilling-egypt.com/${imagePath}`} />
-                  ) : (
-                    <RecipesIcon />
-                  )}
-                </ImageWrapper>
-                <div>{formatCurrency(price)}</div>
-                <div>{description}</div>
-                <div>{category[0]?.name || "---"}</div>
-                <div>{tag?.name || "---"}</div>
-                <ActionsWrapper>
-                  <ActionTrigger onClick={() => onEditHandler(id)}>
-                    <Edit />
-                  </ActionTrigger>
-                  <DeleteRecipeDialog refetchRecipes={refetchRecipes} id={id} />
-                </ActionsWrapper>
-              </Row>
-            );
-          })}
+          {isLoadingRecipes && <Loader />}
+          {!isLoadingRecipes && recipes.length == 0 && <NoData />}
+          {!isLoadingRecipes &&
+            recipes.length > 0 &&
+            recipes.map((recipe) => {
+              const { id, name, description, price, imagePath, category, tag } =
+                recipe;
+              return (
+                <Row key={id}>
+                  <div>{name}</div>
+                  <ImageWrapper>
+                    {imagePath ? (
+                      <img src={`https://upskilling-egypt.com/${imagePath}`} />
+                    ) : (
+                      <RecipesIcon />
+                    )}
+                  </ImageWrapper>
+                  <div>{formatCurrency(price)}</div>
+                  <div>{description}</div>
+                  <div>{category[0]?.name || "---"}</div>
+                  <div>{tag?.name || "---"}</div>
+                  <ActionsWrapper>
+                    <ActionTrigger onClick={() => onEditHandler(id)}>
+                      <Edit />
+                    </ActionTrigger>
+                    <DeleteRecipeDialog
+                      refetchRecipes={refetchRecipes}
+                      id={id}
+                    />
+                  </ActionsWrapper>
+                </Row>
+              );
+            })}
         </Body>
         <Footer>
           <Pagination>
@@ -178,7 +191,9 @@ function Recipes() {
             type="number"
             placeholder="Enter Page Size"
             value={params.pageSize}
-            onChange={(e) => updateParams({ pageSize: e.target.value })}
+            onChange={(e) =>
+              updateParams({ pageNumber: 1, pageSize: e.target.value })
+            }
           ></PageSize>
         </Footer>
       </Table>
@@ -274,6 +289,8 @@ const SelectCategory = styled.select`
 
 const Table = styled.div``;
 const Header = styled.div`
+  position: sticky;
+  top: 0;
   background: var(--green-200);
   padding-inline: var(--spacing-160);
   padding-block: var(--spacing-80);
@@ -368,6 +385,7 @@ const PageSize = styled.input`
   }
 `;
 const Page = styled.button`
+  min-height: 2rem;
   color: var(--grey-100);
   padding-inline: 0.5rem;
 

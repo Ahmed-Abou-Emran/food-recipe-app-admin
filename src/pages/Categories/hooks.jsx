@@ -10,6 +10,7 @@ export const useUpdateParams = () => {
 };
 
 export const useCategories = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const { params, updateParams, categories, setCategories } =
     React.useContext(CategoriesContext);
   const [totalNumberOfPages, setTotalNumberOfPages] = React.useState();
@@ -19,6 +20,7 @@ export const useCategories = () => {
   };
   React.useEffect(() => {
     const getCategories = () => {
+      setIsLoading(true);
       axios
         .get(`${categoriesURL}`, {
           headers: {
@@ -36,9 +38,10 @@ export const useCategories = () => {
         })
         .catch((error) => {
           console.log(error);
-        });
+        })
+        .finally(() => setIsLoading(false));
     };
     getCategories();
   }, [params]);
-  return { categories, totalNumberOfPages, refetchCategories };
+  return { categories, totalNumberOfPages, refetchCategories, isLoading };
 };
