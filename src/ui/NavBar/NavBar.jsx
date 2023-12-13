@@ -4,8 +4,8 @@ import { PersonalImage } from "../../assets";
 import { FaChevronDown as ArrowDown } from "react-icons/fa";
 import { MdNotificationsActive as Notification } from "react-icons/md";
 import { IoIosSearch as Search } from "react-icons/io";
+import { UserContext } from "../../pages/UserProvider";
 
-import { UserContext } from "../../features/UserProvider";
 function NavBar() {
   const userData = React.useContext(UserContext);
   console.log(userData);

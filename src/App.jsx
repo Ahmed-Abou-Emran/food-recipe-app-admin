@@ -2,7 +2,6 @@ import "./App.css";
 import React from "react";
 import { Toaster } from "react-hot-toast";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {UserProvider} from "./pages/";
 import {
   Login,
   Register,
@@ -13,6 +12,7 @@ import {
   Users,
   Recipes,
   Categories,
+  UserProvider,
 } from "./pages";
 import UsersProvider from "./pages/Users/UsersProvider";
 import CategoriesProvider from "./pages/Categories/CategoriesProvider";
