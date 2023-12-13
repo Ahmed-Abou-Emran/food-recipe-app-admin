@@ -1,6 +1,11 @@
 import axios from "axios";
 import React from "react";
 import { FaRegUserCircle as RegularUser } from "react-icons/fa";
+import {
+  GrCaretNext as Next,
+  GrCaretPrevious as Previous,
+} from "react-icons/gr";
+
 import styled from "styled-components";
 
 import { DeleteUserDialog, ViewUserDialog } from "./UsersDialogs";
@@ -10,7 +15,7 @@ import { NoData } from "../../ui";
 
 function Users() {
   const [params, updateParams] = useUpdateParams();
-  const { users, totalNumberOfPages } = useUsers();
+  const { users, totalNumberOfPages, refetchUsers } = useUsers();
   return (
     <Wrapper>
       <AddNewItemWrapper>
@@ -22,12 +27,16 @@ function Users() {
       <SearchControls>
         <SearchInput
           value={params?.userName}
-          onChange={(e) => updateParams({ userName: e.target.value })}
+          onChange={(e) =>
+            updateParams({ pageNumber: 1, userName: e.target.value })
+          }
           placeholder="Search By User Name"
         />
         <SelectRole
           value={params?.groups}
-          onChange={(e) => updateParams({ groups: e.target.value })}
+          onChange={(e) =>
+            updateParams({ pageNumber: 1, groups: e.target.value })
+          }
         >
           <option value="">All Roles</option>
           <option value="1">Super Admin</option>
@@ -63,7 +72,10 @@ function Users() {
                 <ActionsWrapper>
                   <ViewUserDialog user={user} />
                   {user.group.name === "SystemUser" ? (
-                    <DeleteUserDialog id={user.id} itemName="user" />
+                    <DeleteUserDialog
+                      refetchUsers={refetchUsers}
+                      id={user.id}
+                    />
                   ) : (
                     ""
                   )}
@@ -75,6 +87,22 @@ function Users() {
         {users.length == 0 && <NoData />}
         <Footer>
           <Pagination>
+            <Page
+              onClick={() =>
+                updateParams({ pageNumber: +params.pageNumber - 1 })
+              }
+              disabled={params.pageNumber == 1 ? true : false}
+              style={
+                params.pageNumber == 1
+                  ? {
+                      backgroundColor: "var(--green-200)",
+                      cursor: "not-allowed",
+                    }
+                  : { backgroundColor: "var(--green-300)", cursor: "pointer" }
+              }
+            >
+              <Previous />
+            </Page>
             {range(1, +totalNumberOfPages + 1).map((i) => (
               <Page
                 onClick={() => updateParams({ pageNumber: i })}
@@ -88,6 +116,22 @@ function Users() {
                 {i}
               </Page>
             ))}
+            <Page
+              onClick={() =>
+                updateParams({ pageNumber: +params.pageNumber + 1 })
+              }
+              disabled={params.pageNumber == totalNumberOfPages ? true : false}
+              style={
+                params.pageNumber == totalNumberOfPages
+                  ? {
+                      backgroundColor: "var(--green-200)",
+                      cursor: "not-allowed",
+                    }
+                  : { backgroundColor: "var(--green-300)", cursor: "pointer" }
+              }
+            >
+              <Next />
+            </Page>
           </Pagination>
           <PageSize
             type="number"
@@ -225,7 +269,6 @@ const Pagination = styled.div`
   margin-block-start: var(--spacing-40);
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: var(--spacing-20);
 `;
 const PageSize = styled.input`
@@ -250,6 +293,10 @@ const Page = styled.button`
   transition: all 300ms ease-in-out;
   &:hover {
     background: var(--green-600);
+  }
+
+  svg {
+    color: green;
   }
 `;
 

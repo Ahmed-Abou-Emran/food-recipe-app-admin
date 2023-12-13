@@ -3,6 +3,11 @@ import styled from "styled-components";
 import { range } from "../../utils/helpers";
 import { FaRegEdit as Edit } from "react-icons/fa";
 import {
+  GrCaretNext as Next,
+  GrCaretPrevious as Previous,
+} from "react-icons/gr";
+
+import {
   AddCategoryDialog,
   DeleteCategoryDialog,
   UpdateCategoryDialog,
@@ -26,7 +31,7 @@ function Categories() {
   };
 
   const handlePageClick = (e) => {
-    updateParams({ name: e.target.value });
+    updateParams({ pageNumber: 1, name: e.target.value });
   };
 
   return (
@@ -50,7 +55,9 @@ function Categories() {
       <SearchControls>
         <SearchInput
           value={params?.name}
-          onChange={handlePageClick}
+          onChange={(e) =>
+            updateParams({ pageNumber: 1, name: e.target.value })
+          }
           placeholder="Search By Category Name"
         />
       </SearchControls>
@@ -86,6 +93,22 @@ function Categories() {
         </Body>
         <Footer>
           <Pagination>
+            <Page
+              onClick={() =>
+                updateParams({ pageNumber: +params.pageNumber - 1 })
+              }
+              disabled={params.pageNumber == 1 ? true : false}
+              style={
+                params.pageNumber == 1
+                  ? {
+                      backgroundColor: "var(--green-200)",
+                      cursor: "not-allowed",
+                    }
+                  : { backgroundColor: "var(--green-300)", cursor: "pointer" }
+              }
+            >
+              <Previous />
+            </Page>
             {range(1, +totalNumberOfPages + 1).map((i) => (
               <Page
                 onClick={() => updateParams({ pageNumber: i })}
@@ -99,6 +122,22 @@ function Categories() {
                 {i}
               </Page>
             ))}
+            <Page
+              onClick={() =>
+                updateParams({ pageNumber: +params.pageNumber + 1 })
+              }
+              disabled={params.pageNumber == totalNumberOfPages ? true : false}
+              style={
+                params.pageNumber == totalNumberOfPages
+                  ? {
+                      backgroundColor: "var(--green-200)",
+                      cursor: "not-allowed",
+                    }
+                  : { backgroundColor: "var(--green-300)", cursor: "pointer" }
+              }
+            >
+              <Next />
+            </Page>
           </Pagination>
           <PageSize
             type="number"
@@ -237,7 +276,6 @@ const Pagination = styled.div`
   margin-block-start: var(--spacing-40);
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: var(--spacing-20);
 `;
 const PageSize = styled.input`

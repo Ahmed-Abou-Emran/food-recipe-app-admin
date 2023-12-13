@@ -3,6 +3,11 @@ import styled from "styled-components";
 import { formatCurrency, range } from "../../utils/helpers";
 import { IoFastFoodOutline as RecipesIcon } from "react-icons/io5";
 import { FaRegEdit as Edit } from "react-icons/fa";
+import {
+  GrCaretNext as Next,
+  GrCaretPrevious as Previous,
+} from "react-icons/gr";
+
 import { useCategories } from "../Categories/hooks";
 import { useUpdateParams, useRecipes, useTags } from "./hooks";
 import {
@@ -53,13 +58,17 @@ function Recipes() {
       <SearchControls>
         <SearchInput
           value={params?.name}
-          onChange={(e) => updateParams({ name: e.target.value })}
+          onChange={(e) =>
+            updateParams({ pageNumber: 1, name: e.target.value })
+          }
           placeholder="Search By Recipe Name"
         />
 
         <SelectCategory
           value={params.categoryId}
-          onChange={(e) => updateParams({ categoryId: e.target.value })}
+          onChange={(e) =>
+            updateParams({ pageNumber: 1, categoryId: e.target.value })
+          }
         >
           <option value="">All Categories</option>
           {categories.map((category) => (
@@ -119,6 +128,22 @@ function Recipes() {
         </Body>
         <Footer>
           <Pagination>
+            <Page
+              onClick={() =>
+                updateParams({ pageNumber: +params.pageNumber - 1 })
+              }
+              disabled={params.pageNumber == 1 ? true : false}
+              style={
+                params.pageNumber == 1
+                  ? {
+                      backgroundColor: "var(--green-200)",
+                      cursor: "not-allowed",
+                    }
+                  : { backgroundColor: "var(--green-300)", cursor: "pointer" }
+              }
+            >
+              <Previous />
+            </Page>
             {range(1, +totalNumberOfPages + 1).map((i) => (
               <Page
                 onClick={() => updateParams({ pageNumber: i })}
@@ -132,13 +157,29 @@ function Recipes() {
                 {i}
               </Page>
             ))}
+            <Page
+              onClick={() =>
+                updateParams({ pageNumber: +params.pageNumber + 1 })
+              }
+              disabled={params.pageNumber == totalNumberOfPages ? true : false}
+              style={
+                params.pageNumber == totalNumberOfPages
+                  ? {
+                      backgroundColor: "var(--green-200)",
+                      cursor: "not-allowed",
+                    }
+                  : { backgroundColor: "var(--green-300)", cursor: "pointer" }
+              }
+            >
+              <Next />
+            </Page>
           </Pagination>
           <PageSize
             type="number"
             placeholder="Enter Page Size"
             value={params.pageSize}
             onChange={(e) => updateParams({ pageSize: e.target.value })}
-          />
+          ></PageSize>
         </Footer>
       </Table>
     </Wrapper>
@@ -312,7 +353,6 @@ const Pagination = styled.div`
   margin-block-start: var(--spacing-40);
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: var(--spacing-20);
 `;
 const PageSize = styled.input`
