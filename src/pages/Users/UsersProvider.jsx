@@ -44,8 +44,10 @@ export const useUpdateParams = () => {
 };
 
 export const useUsers = () => {
-  const { params, users, setUsers } = React.useContext(UsersContext);
+  const { updateParams, params, users, setUsers } =
+    React.useContext(UsersContext);
   const [totalNumberOfPages, setTotalNumberOfPages] = React.useState();
+
   const getUsers = () => {
     axios
       .get(`${usersURL}`, {
@@ -66,10 +68,12 @@ export const useUsers = () => {
         console.log(error);
       });
   };
-
+  const refetchUsers = () => {
+    updateParams(params);
+  };
   React.useEffect(() => {
     getUsers();
   }, [params]);
-  return { users, totalNumberOfPages };
+  return { users, totalNumberOfPages, refetchUsers };
 };
 export default UsersProvider;

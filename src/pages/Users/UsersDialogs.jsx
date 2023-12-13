@@ -7,10 +7,11 @@ import { FaRegUserCircle as RegularUser } from "react-icons/fa";
 
 import axios from "axios";
 import { formatDate } from "../../utils/helpers";
-export const DeleteUserDialog = ({ id }) => {
+export const DeleteUserDialog = ({ id, refetchUsers }) => {
   const [open, setOpen] = React.useState(false);
 
   const deleteHandler = () => {
+    console.log(id);
     axios
       .delete(`${usersURL}/${id}`, {
         headers: {
@@ -22,11 +23,12 @@ export const DeleteUserDialog = ({ id }) => {
           response?.data?.data?.message || "User Deleted Successfully"
         );
         setOpen(false);
+        refetchUsers();
         console.log(response);
       })
       .catch((error) => {
         toast.error(
-          error?.data?.data?.message ||
+          error?.response?.data?.message ||
             "Something Went wrong, Unable to Deleted User Delete Successfully"
         );
         console.log(error);
