@@ -9,14 +9,11 @@ const UsersProvider = ({ children }) => {
   const [users, setUsers] = React.useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [params, setParams] = React.useState({
-    pageSize: searchParams.get("pageSize") || 5,
-    pageNumber: searchParams.get("pageNumber") || 1,
+    pageSize: +searchParams.get("pageSize") || 5,
+    pageNumber: +searchParams.get("pageNumber") || 1,
     userName: searchParams.get("userName") || "",
     groups: searchParams.get("groups") || "",
   });
-
-  console.log(searchParams);
-  console.log([...searchParams]);
 
   const updateParams = ({
     userName = params.userName,
@@ -39,7 +36,6 @@ const UsersProvider = ({ children }) => {
 export const useUpdateParams = () => {
   const { params, updateParams } = React.useContext(UsersContext);
 
-  console.log(params);
   return [params, updateParams];
 };
 
@@ -59,16 +55,12 @@ export const useUsers = () => {
         params,
       })
       .then((response) => {
-        console.log(response);
         const NewUsers = response?.data?.data;
         const NewTotalNumberOfPages = response?.data?.totalNumberOfPages;
-        console.log(NewTotalNumberOfPages);
         setTotalNumberOfPages(NewTotalNumberOfPages);
         setUsers(NewUsers);
       })
-      .catch((error) => {
-        console.log(error);
-      })
+      .catch((error) => {})
       .finally(() => {
         setIsLoading(false);
       });
@@ -76,9 +68,15 @@ export const useUsers = () => {
   const refetchUsers = () => {
     updateParams(params);
   };
+
   React.useEffect(() => {
-    getUsers();
+    const timerId = setTimeout(() => {
+      getUsers();
+    }, 500);
+
+    return () => clearTimeout(timerId);
   }, [params]);
+
   return { users, totalNumberOfPages, refetchUsers, isLoading };
 };
 export default UsersProvider;

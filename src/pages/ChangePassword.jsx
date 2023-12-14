@@ -31,7 +31,6 @@ function ChangePassword() {
         },
       })
       .then((res) => {
-        console.log(res.data);
         toast.success("Password Changed Successfully", {
           position: "top-right",
         });
@@ -48,7 +47,6 @@ function ChangePassword() {
       });
   };
 
-  console.log(errors);
   return (
     <Wrapper>
       <LogoWrapper>

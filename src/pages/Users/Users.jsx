@@ -141,10 +141,13 @@ function Users() {
             </Page>
           </Pagination>
           <PageSize
+            min={5}
             type="number"
             placeholder="Enter Page Size"
             value={params.pageSize}
-            onChange={(e) => updateParams({ pageSize: e.target.value })}
+            onChange={(e) =>
+              updateParams({ pageNumber: 1, pageSize: e.target.value })
+            }
           ></PageSize>
         </Footer>
       </Table>
@@ -273,6 +276,8 @@ const Footer = styled.div`
   align-items: center;
 `;
 const Pagination = styled.div`
+  max-width: 100%;
+  overflow: auto;
   margin-block-start: var(--spacing-40);
   display: flex;
   justify-content: center;
