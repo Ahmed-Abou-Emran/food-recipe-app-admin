@@ -47,6 +47,7 @@ const InputWrapper = styled.div`
   }
 
   span {
+    padding-inline-start: var(--spacing-120);
     position: absolute;
     color: #ef4444;
     font-size: 0.75rem;

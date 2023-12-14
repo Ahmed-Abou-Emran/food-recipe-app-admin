@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import { PersonalImage } from "../../assets";
 import { FaChevronDown as ArrowDown } from "react-icons/fa";
 import { MdNotificationsActive as Notification } from "react-icons/md";
 import { IoIosSearch as Search } from "react-icons/io";
 import { UserContext } from "../../pages/UserProvider";
+import { FaRegUserCircle as RegularUser } from "react-icons/fa";
 
 function NavBar() {
   const userData = React.useContext(UserContext);
-  console.log(userData);
+
   return (
     <Wrapper>
       <SearchForm>
@@ -19,7 +19,11 @@ function NavBar() {
       </SearchForm>
       <Avatar>
         <ImageWrapper>
-          <img src={PersonalImage} />
+          {!userData?.imagePath ? (
+            <RegularUser />
+          ) : (
+            <img src={`https://upskilling-egypt.com//${userData?.imagePath}`} />
+          )}
         </ImageWrapper>
         <span>{userData?.userName || "user"}</span>
       </Avatar>
@@ -93,6 +97,9 @@ const SearchForm = styled.form`
 const ImageWrapper = styled.div`
   img {
     width: 100%;
+  }
+  svg {
+    font-size: 2.4rem;
   }
 `;
 const Avatar = styled.div`

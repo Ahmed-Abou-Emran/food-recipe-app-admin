@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const useUpdateParams = () => {
   const { params, updateParams } = React.useContext(CategoriesContext);
-  console.log(params);
+
   return [params, updateParams];
 };
 
@@ -29,16 +29,13 @@ export const useCategories = () => {
           params,
         })
         .then((response) => {
-          console.log(response);
           const newCategories = response?.data?.data;
           const newTotalNumberOfPages = response?.data?.totalNumberOfPages;
-          console.log(newTotalNumberOfPages);
+
           setTotalNumberOfPages(newTotalNumberOfPages);
           setCategories(newCategories);
         })
-        .catch((error) => {
-          console.log(error);
-        })
+        .catch((error) => {})
         .finally(() => setIsLoading(false));
     };
     getCategories();

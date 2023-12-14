@@ -11,7 +11,6 @@ export const DeleteUserDialog = ({ id, refetchUsers }) => {
   const [open, setOpen] = React.useState(false);
 
   const deleteHandler = () => {
-    console.log(id);
     axios
       .delete(`${usersURL}/${id}`, {
         headers: {
@@ -24,14 +23,12 @@ export const DeleteUserDialog = ({ id, refetchUsers }) => {
         );
         setOpen(false);
         refetchUsers();
-        console.log(response);
       })
       .catch((error) => {
         toast.error(
           error?.response?.data?.message ||
             "Something Went wrong, Unable to Deleted User Delete Successfully"
         );
-        console.log(error);
       });
   };
 

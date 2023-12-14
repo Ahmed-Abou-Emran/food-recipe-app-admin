@@ -22,14 +22,12 @@ export const DeleteCategoryDialog = ({ id, refetchCategories }) => {
         );
         setOpen(false);
         refetchCategories();
-        console.log(response);
       })
       .catch((error) => {
         toast.error(
           error?.data?.data?.message ||
             "Something Went wrong, Unable to delete Category Successfully"
         );
-        console.log(error);
       });
   };
 
@@ -63,16 +61,13 @@ export const AddCategoryDialog = ({ open, setOpen, refetchCategories }) => {
         );
         setOpen(false);
         refetchCategories();
-        console.log(response);
       })
       .catch((error) => {
         toast.error(
           error?.data?.data?.message ||
             "Something Went wrong, Unable to add a New Category"
         );
-        console.log(error);
       });
-    console.log(data);
   };
   return (
     <FormDialog open={open} onOpenChange={setOpen}>
@@ -125,16 +120,13 @@ export const UpdateCategoryDialog = ({
         );
         refetchCategories();
         setOpen(false);
-        console.log(response);
       })
       .catch((error) => {
         toast.error(
           error?.data?.data?.message ||
             "Something Went wrong, Unable to update Category"
         );
-        console.log(error);
       });
-    console.log(data);
   };
   return (
     <FormDialog open={open} onOpenChange={setOpen}>

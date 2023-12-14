@@ -27,15 +27,12 @@ export const useRecipes = () => {
           params,
         })
         .then((response) => {
-          console.log({ recipes: response });
           const newRecipes = response?.data?.data;
           const newTotalNumberOfPages = response?.data?.totalNumberOfPages;
           setTotalNumberOfPages(newTotalNumberOfPages);
           setRecipes(newRecipes);
         })
-        .catch((error) => {
-          console.log(error);
-        })
+        .catch((error) => {})
         .finally(() => {
           setIsLoading(false);
         });
@@ -61,13 +58,10 @@ export const useTags = () => {
         },
       })
       .then((response) => {
-        console.log({ tags: response?.data });
         const newTags = response?.data;
         setTags(newTags);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   React.useEffect(() => {

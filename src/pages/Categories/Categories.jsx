@@ -33,7 +33,6 @@ function Categories() {
       if (category.id === id) setCurrentCategory(category);
     });
     setOpenEdit(true);
-    console.log(currentCategory);
   };
 
   const handlePageClick = (e) => {

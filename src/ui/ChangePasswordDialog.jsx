@@ -36,23 +36,19 @@ const ChangePasswordDialog = ({ open, setOpen }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
-        toast.success("Password Changed Successfully", {
+        toast.success(res?.data?.message || "Password Changed Successfully", {
           position: "top-right",
         });
         setOpen(false);
       })
       .catch((err) => {
-        console.error(err);
         toast.error(`${err.response.data.message || "Something Went Wrong"}`, {
           position: "top-right",
         });
-        console.error(err.response.data.message);
       })
       .finally(() => setLoading(false));
   };
 
-  console.log(errors);
   return (
     <FormDialog open={open} onOpenChange={setOpen}>
       <Wrapper>

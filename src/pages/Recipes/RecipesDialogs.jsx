@@ -22,14 +22,12 @@ export const DeleteRecipeDialog = ({ id, refetchRecipes }) => {
         toast.success(response?.data?.message || "Recipe Deleted Successfully");
         setOpen(false);
         refetchRecipes();
-        console.log(response);
       })
       .catch((error) => {
         toast.error(
           error?.data?.data?.message ||
             "Something Went wrong, Unable to delete Recipe Successfully"
         );
-        console.log(error);
       });
   };
 
@@ -53,7 +51,7 @@ export const AddRecipeDialog = ({
 }) => {
   // const { refetchRecipes } = useRecipes();
   //   const { updateParams } = useUpdateParams();
-  console.log(tags);
+
   const {
     register,
     handleSubmit,
@@ -73,7 +71,6 @@ export const AddRecipeDialog = ({
         }
       )
       .then((response) => {
-        console.log(response);
         toast.success(response?.data?.message || "Recipe Added Successfully");
         setOpen(false);
         refetchRecipes();
@@ -83,9 +80,7 @@ export const AddRecipeDialog = ({
           error?.data?.data?.message ||
             "Something Went wrong, Unable to add a New Recipe"
         );
-        console.log(error);
       });
-    console.log(data);
   };
   return (
     <FormDialog open={open} onOpenChange={setOpen}>
@@ -199,15 +194,12 @@ export const UpdateRecipeDialog = ({
   //   const [tags] = useTags();
   //   const { categories } = useCategories();
 
-  console.log(recipe);
   const formatedRecipe = {
     ...recipe,
     tagId: recipe.tag.id,
     categoriesIds: recipe?.category[0].id + "",
   };
-  console.log({ categories });
-  console.log({ tags });
-  console.log({ formatedRecipe });
+
   const {
     register,
     handleSubmit,
@@ -233,16 +225,13 @@ export const UpdateRecipeDialog = ({
         toast.success(response?.data?.message || "Recipe Updated Successfully");
         refetchRecipes();
         setOpen(false);
-        console.log(response);
       })
       .catch((error) => {
         toast.error(
           error?.data?.data?.message ||
             "Something Went wrong, Unable to update Recipe"
         );
-        console.log(error);
       });
-    console.log(data);
   };
 
   React.useEffect(() => {

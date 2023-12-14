@@ -37,7 +37,6 @@ function Recipes() {
       if (recipe.id === id) setCurrentRecipe(recipe);
     });
     setOpenEdit(true);
-    console.log(currentRecipe);
   };
 
   return (

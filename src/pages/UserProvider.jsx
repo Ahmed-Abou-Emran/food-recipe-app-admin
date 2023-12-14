@@ -17,12 +17,9 @@ const UserProvider = ({ children }) => {
           },
         })
         .then((response) => {
-          console.log(response);
           setUserData(response?.data);
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch((error) => {});
     };
 
     getCurrentUserData();
@@ -30,7 +27,6 @@ const UserProvider = ({ children }) => {
     if (adminToken) {
       const decodedToken = jwtDecode(adminToken);
       setUserData(decodedToken);
-      console.log(decodedToken);
     }
   }, [adminToken]);
 

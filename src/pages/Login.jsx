@@ -24,7 +24,6 @@ function Login() {
     axios
       .post("https://upskilling-egypt.com/api/v1/Users/Login", data)
       .then((res) => {
-        console.log(res.data);
         toast.success("Login Successfully", {
           position: "top-right",
         });
@@ -34,11 +33,10 @@ function Login() {
         navigate("/home");
       })
       .catch((err) => {
-        console.error(err);
         toast.error(`${err.response.data.message}`, {
           position: "top-right",
         });
-        console.error(err.response.data.message);
+
         setLoading(false);
       });
   };
@@ -49,7 +47,6 @@ function Login() {
     }
   }, [navigate]);
 
-  console.log(errors);
   return (
     <Wrapper>
       <LogoWrapper>

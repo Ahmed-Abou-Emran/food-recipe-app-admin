@@ -38,11 +38,10 @@ function ChangePassword() {
         setLoading(false);
       })
       .catch((err) => {
-        console.error(err);
         toast.error(`${err.response.data.message || "Something Went Wrong"}`, {
           position: "top-right",
         });
-        console.error(err.response.data.message);
+
         setLoading(false);
       });
   };

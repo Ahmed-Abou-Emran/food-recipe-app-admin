@@ -5,11 +5,9 @@ import { useLocation } from "react-router-dom";
 
 function Header() {
   const { pathname } = useLocation();
-  console.log(pathname);
 
   const { h3, paragraph, imagePath } =
     HeaderContents[pathname.split("/")[1]] || HeaderContents.home;
-  console.log(imagePath);
   return (
     <Wrapper>
       <h3>{h3}</h3>

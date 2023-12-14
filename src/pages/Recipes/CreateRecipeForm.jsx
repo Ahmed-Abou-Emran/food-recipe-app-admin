@@ -42,7 +42,7 @@ function CreateRecipeForm({ recipeToEdit = {}, onCloseModal }) {
         },
       }
     );
-    console.log(data);
+
     // if (isEditSession)
     //   editRecipe(
     //     { newRecipeData: { ...data, image }, id: editId },
@@ -65,9 +65,7 @@ function CreateRecipeForm({ recipeToEdit = {}, onCloseModal }) {
     //   );
   }
 
-  function onError(errors) {
-    console.log(errors);
-  }
+  function onError(errors) {}
 
   return (
     <Form

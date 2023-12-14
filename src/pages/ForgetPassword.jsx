@@ -37,7 +37,6 @@ function ForgetPassword() {
     setStep(step);
     setUserInput({ userInput, ...getValues() });
     setSearchParams({ step });
-    console.log(searchParams.get("step"));
   };
   const onSubmit = (data) => {
     setIsLoading(true);
@@ -49,7 +48,6 @@ function ForgetPassword() {
         data
       )
       .then((res) => {
-        console.log(res.data);
         toast.success(
           `${
             step === 1
@@ -67,17 +65,13 @@ function ForgetPassword() {
         }
       })
       .catch((err) => {
-        console.error(err);
         toast.error(`${err.response.data.message}`, {
           position: "top-right",
         });
-        console.error(err.response.data.message);
       })
       .finally(() => setIsLoading(false));
   };
 
-  console.log(getValues());
-  console.log(errors);
   return (
     <Wrapper>
       <LogoWrapper>
