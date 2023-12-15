@@ -3,7 +3,7 @@ import { HeaderHome, HeaderRecipes } from "../../assets";
 const HeaderContents = {
   home: {
     id: 1,
-    h3: "Welcome Emran99",
+    h3: "Welcome ",
     paragraph:
       "This is a welcoming screen for the entry of the application , you can now see the options",
     imagePath: HeaderHome,
@@ -26,6 +26,12 @@ const HeaderContents = {
     h3: "Categories List",
     paragraph:
       "You can now add your items that any user can order it from the Application and you can edit",
+    imagePath: HeaderRecipes,
+  },
+  favorites: {
+    id: 5,
+    h3: "Favorites List",
+    paragraph: "You can now view your favorite items that you added ",
     imagePath: HeaderRecipes,
   },
 };

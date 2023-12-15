@@ -11,8 +11,8 @@ import {
   Home,
   Users,
   Recipes,
+  Favorites,
   Categories,
-  UserProvider,
 } from "./pages";
 import UsersProvider from "./pages/Users/UsersProvider";
 import CategoriesProvider from "./pages/Categories/CategoriesProvider";
@@ -47,6 +47,10 @@ const router = createBrowserRouter([
         element: <Recipes />,
       },
       {
+        path: "/favorites",
+        element: <Favorites />,
+      },
+      {
         path: "/categories",
         element: <Categories />,
       },
@@ -72,9 +76,7 @@ function App() {
   return (
     <>
       <Toaster position="top right" />
-      <UserProvider>
-        <RouterProvider router={router} />
-      </UserProvider>
+      <RouterProvider router={router} />
     </>
   );
 }

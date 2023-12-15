@@ -15,7 +15,7 @@ export const DeleteRecipeDialog = ({ id, refetchRecipes }) => {
     axios
       .delete(`${recipesURL}/${id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
       })
       .then((response) => {
@@ -65,7 +65,7 @@ export const AddRecipeDialog = ({
         { ...data, recipeImage: data.recipeImage[0] },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             "Content-Type": "multipart/form-data",
           },
         }
@@ -216,7 +216,7 @@ export const UpdateRecipeDialog = ({
         { ...data, recipeImage: data.recipeImage[0] },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             "Content-Type": "multipart/form-data",
           },
         }

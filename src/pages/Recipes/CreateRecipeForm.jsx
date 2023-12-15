@@ -37,7 +37,7 @@ function CreateRecipeForm({ recipeToEdit = {}, onCloseModal }) {
 
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           "Content-Type": "multipart/form-data", // Important for file uploads
         },
       }

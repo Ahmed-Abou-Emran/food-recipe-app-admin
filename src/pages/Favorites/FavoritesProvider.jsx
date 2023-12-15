@@ -1,10 +1,10 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 
-export const RecipesContext = React.createContext();
+export const FavoriteRecipesContext = React.createContext();
 
-const RecipesProvider = ({ children }) => {
-  const [recipes, setRecipes] = React.useState([]);
+const FavoriteRecipesProvider = ({ children }) => {
+  const [favoriteRecipes, setFavoriteRecipes] = React.useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [params, setParams] = React.useState({
     pageSize: searchParams.get("pageSize") || 5,
@@ -34,12 +34,12 @@ const RecipesProvider = ({ children }) => {
   };
 
   return (
-    <RecipesContext.Provider
-      value={{ updateParams, params, recipes, setRecipes }}
+    <FavoriteRecipesContext.Provider
+      value={{ updateParams, params, favoriteRecipes, setFavoriteRecipes }}
     >
       {children}
-    </RecipesContext.Provider>
+    </FavoriteRecipesContext.Provider>
   );
 };
 
-export default RecipesProvider;
+export default FavoriteRecipesProvider;

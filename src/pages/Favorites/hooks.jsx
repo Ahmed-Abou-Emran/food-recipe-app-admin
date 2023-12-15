@@ -1,36 +1,36 @@
 import React from "react";
-import { RecipesContext } from "./RecipesProvider";
-import { recipesURL, tagsURL } from "../../services/END_POINTS";
+import { favoriteRecipesURL, tagsURL } from "../../services/END_POINTS";
 import axios from "axios";
+import { FavoriteRecipesContext } from "./FavoritesProvider";
 
 export const useUpdateParams = () => {
-  const { params, updateParams } = React.useContext(RecipesContext);
+  const { params, updateParams } = React.useContext(FavoriteRecipesContext);
   return [params, updateParams];
 };
 
-export const useRecipes = () => {
+export const useFavoriteRecipes = () => {
   const [isLoading, setIsLoading] = React.useState(false);
-  const { params, updateParams, recipes, setRecipes } =
-    React.useContext(RecipesContext);
-  const [totalNumberOfPages, setTotalNumberOfPages] = React.useState();
+  const { params, updateParams, recipes, setFavoriteRecipes } =
+    React.useContext(FavoriteRecipesContext);
+  const [totalNumberOfPages, setTotalNumberOfPages] = React.useState(null);
   const refetchRecipes = () => {
     updateParams(params);
   };
   React.useEffect(() => {
-    const getRecipes = () => {
+    const getFavoriteRecipes = () => {
       setIsLoading(true);
       axios
-        .get(`${recipesURL}`, {
+        .get(`${favoriteRecipesURL}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
           params,
         })
         .then((response) => {
-          const newRecipes = response?.data?.data;
+          const newFavoriteRecipes = response?.data?.data;
           const newTotalNumberOfPages = response?.data?.totalNumberOfPages;
           setTotalNumberOfPages(newTotalNumberOfPages);
-          setRecipes(newRecipes);
+          setFavoriteRecipes(newFavoriteRecipes);
         })
         .catch((error) => {})
         .finally(() => {
@@ -38,14 +38,19 @@ export const useRecipes = () => {
         });
     };
 
-    // getRecipes();
+    // getFavoriteRecipes();
 
     // to prevent sending unnecessary network requests to the backend
-    const timerId = setTimeout(getRecipes, 500);
+    const timerId = setTimeout(getFavoriteRecipes, 500);
     return () => clearTimeout(timerId);
   }, [params]);
 
-  return { recipes, totalNumberOfPages, refetchRecipes, isLoading };
+  return {
+    recipes,
+    totalNumberOfPages,
+    refetchRecipes,
+    isLoading,
+  };
 };
 
 export const useTags = () => {

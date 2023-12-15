@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { formatCurrency, range } from "../../utils/helpers";
 import { IoFastFoodOutline as RecipesIcon } from "react-icons/io5";
 import { FaRegEdit as Edit } from "react-icons/fa";
+import { FiHeart as Heart } from "react-icons/fi";
 import {
   GrCaretNext as Next,
   GrCaretPrevious as Previous,
@@ -16,8 +17,11 @@ import {
   UpdateRecipeDialog,
 } from "./RecipesDialogs";
 import { NoData, Loader } from "../../ui";
+import { useUserContext } from "../UserProvider";
 
 function Recipes() {
+  const { userData } = useUserContext();
+  const isAdmin = userData?.userType == "SuperAdmin";
   const {
     recipes,
     totalNumberOfPages,
@@ -46,18 +50,22 @@ function Recipes() {
           <h3>Recipes Table Details</h3>
           <p>You can check all details</p>
         </Left>
-        <Right>
-          <AddButton onClick={() => setOpenAdd(true)}>Add New Recipe</AddButton>
-          {openAdd && (
-            <AddRecipeDialog
-              refetchRecipes={refetchRecipes}
-              tags={tags}
-              categories={categories}
-              open={openAdd}
-              setOpen={setOpenAdd}
-            />
-          )}
-        </Right>
+        {isAdmin ? (
+          <Right>
+            <AddButton onClick={() => setOpenAdd(true)}>
+              Add New Recipe
+            </AddButton>
+            {openAdd && (
+              <AddRecipeDialog
+                refetchRecipes={refetchRecipes}
+                tags={tags}
+                categories={categories}
+                open={openAdd}
+                setOpen={setOpenAdd}
+              />
+            )}
+          </Right>
+        ) : null}
       </AddNewItemWrapper>
 
       <SearchControls>
@@ -68,8 +76,7 @@ function Recipes() {
           }
           placeholder="Search By Recipe Name"
         />
-
-        <SelectCategory
+        <SelectInput
           value={params.categoryId}
           onChange={(e) =>
             updateParams({ pageNumber: 1, categoryId: e.target.value })
@@ -81,7 +88,20 @@ function Recipes() {
               {category.name}
             </option>
           ))}
-        </SelectCategory>
+        </SelectInput>
+        <SelectInput
+          value={params.tagId}
+          onChange={(e) =>
+            updateParams({ pageNumber: 1, tagId: e.target.value })
+          }
+        >
+          <option value="">All Tags</option>
+          {tags.map((tag) => (
+            <option key={tag.id} value={tag.id}>
+              {tag.name}
+            </option>
+          ))}
+        </SelectInput>
       </SearchControls>
       <Table>
         <Header>
@@ -126,13 +146,21 @@ function Recipes() {
                   <div>{category[0]?.name || "---"}</div>
                   <div>{tag?.name || "---"}</div>
                   <ActionsWrapper>
-                    <ActionTrigger onClick={() => onEditHandler(id)}>
-                      <Edit />
-                    </ActionTrigger>
-                    <DeleteRecipeDialog
-                      refetchRecipes={refetchRecipes}
-                      id={id}
-                    />
+                    {isAdmin ? (
+                      <>
+                        <ActionTrigger onClick={() => onEditHandler(id)}>
+                          <Edit />
+                        </ActionTrigger>
+                        <DeleteRecipeDialog
+                          refetchRecipes={refetchRecipes}
+                          id={id}
+                        />
+                      </>
+                    ) : (
+                      <ActionTrigger>
+                        <Heart />
+                      </ActionTrigger>
+                    )}
                   </ActionsWrapper>
                 </Row>
               );
@@ -273,7 +301,7 @@ const SearchInput = styled.input`
   }
 `;
 
-const SelectCategory = styled.select`
+const SelectInput = styled.select`
   padding-inline: var(--spacing-30);
   padding-block: var(--spacing-20);
   border: 1px solid var(--green-300);
@@ -300,6 +328,11 @@ const Header = styled.div`
   font-style: normal;
   font-weight: 700;
   text-transform: uppercase;
+
+  div {
+    display: flex;
+    justify-content: center;
+  }
 `;
 const Body = styled.div`
   & > div:nth-child(even) {
@@ -314,6 +347,7 @@ const Row = styled.div`
   gap: 0.5rem;
   div {
     display: flex;
+    justify-content: center;
     align-items: center;
   }
 `;
@@ -325,15 +359,20 @@ const ActionsWrapper = styled.div`
 
 const ActionTrigger = styled.button`
   color: var(--grey-600);
-  transition: all 300ms ease-in-out;
+  /* transition: all 300ms ease-in-out; */
   &:focus,
   &:hover {
-    color: var(--grey-800);
-    transform: scale(2);
-    outline: none;
   }
   svg {
     font-size: 1.5rem;
+    transition: all 300ms ease-in-out;
+    stroke-width: 1px;
+    &:hover {
+      color: var(--grey-800);
+      transform: scale(2);
+      outline: none;
+      fill: red;
+    }
   }
   border: none;
   background: none;

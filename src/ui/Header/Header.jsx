@@ -2,15 +2,21 @@ import React from "react";
 import styled from "styled-components";
 import HeaderContents from "./HeaderContents";
 import { useLocation } from "react-router-dom";
+import { useUserContext } from "../../pages/UserProvider";
 
 function Header() {
+  const { userData } = useUserContext();
   const { pathname } = useLocation();
 
+  const currentPath = pathname.split("/")[1];
   const { h3, paragraph, imagePath } =
-    HeaderContents[pathname.split("/")[1]] || HeaderContents.home;
+    HeaderContents[currentPath] || HeaderContents.home;
   return (
     <Wrapper>
-      <h3>{h3}</h3>
+      <h3>
+        {h3}
+        {currentPath === "home" ? userData?.userName : null}
+      </h3>
       <p>{paragraph}</p>
       <ImageWrapper>
         <img src={imagePath} />
