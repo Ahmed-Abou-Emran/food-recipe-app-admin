@@ -1,9 +1,9 @@
 import React from "react";
-import { CiLock as Lock } from "react-icons/ci";
 import {
-  AiTwotoneEye as ShowEye,
-  AiOutlineEyeInvisible as ShowEyeSlash,
-} from "react-icons/ai";
+  FiEyeOff as EyeOff,
+  FiEye as Eye,
+  FiLock as Lock,
+} from "react-icons/fi";
 
 import styled from "styled-components";
 function PasswordInput({
@@ -17,11 +17,7 @@ function PasswordInput({
       <Lock size="1.5rem" />
       {children}
       <TogglePassword type="button" onClick={togglePassword}>
-        {showPassword ? (
-          <ShowEyeSlash size="1.5rem" />
-        ) : (
-          <ShowEye size="1.5rem" />
-        )}
+        {showPassword ? <Eye size="1.5rem" /> : <EyeOff size="1.5rem" />}
       </TogglePassword>
       {error && <span>{error}</span>}
     </InputWrapper>

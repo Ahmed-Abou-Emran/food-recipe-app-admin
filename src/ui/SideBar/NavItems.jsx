@@ -1,13 +1,21 @@
 import React from "react";
+
 import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { FaUsers as Users, FaHome as Home } from "react-icons/fa";
-import { IoFastFoodOutline as Recipes } from "react-icons/io5";
-import { BiCategory as Categories } from "react-icons/bi";
-import { MdLockOpen as ChangePassword } from "react-icons/md";
-import { FiLogOut as LogOut } from "react-icons/fi";
 import ChangePasswordDialog from "../ChangePasswordDialog";
-const navItems = [
+
+import { IoFastFoodOutline as Recipes } from "react-icons/io5";
+import {
+  FiHome as Home,
+  FiUsers as Users,
+  FiGrid as Categories,
+  FiHeart as Heart,
+  FiLock as Lock,
+  FiLogOut as LogOut,
+} from "react-icons/fi";
+import { useUserContext } from "../../pages/UserProvider";
+
+const adminNavItems = [
   {
     id: 1,
     name: "home",
@@ -33,30 +41,53 @@ const navItems = [
     icon: <Categories />,
   },
 ];
+const userNavItems = [
+  {
+    id: 1,
+    name: "home",
+    path: "/home",
+    icon: <Home />,
+  },
+
+  {
+    id: 3,
+    name: "recipes",
+    path: "/recipes",
+    icon: <Recipes />,
+  },
+
+  { id: 5, name: "favorites", path: "/favorites", icon: <Heart /> },
+];
 
 const NavItems = ({ open }) => {
-  const [openChangePassword, setOpenChangePassword] = React.useState(false);
   const navigate = useNavigate();
-  const logOutHandler = () => {
-    localStorage.removeItem("adminToken");
+  const { userData, logOutHandler } = useUserContext();
+  const [openChangePassword, setOpenChangePassword] = React.useState(false);
+  const logOut = () => {
+    logOutHandler();
     navigate("./login");
   };
 
   return (
     <Nav open={open}>
       <ul>
-        {navItems.map((item) => (
-          <NavItem open={open} key={item.id} {...item} />
-        ))}
+        {userData?.userType == "SuperAdmin" &&
+          adminNavItems.map((item) => (
+            <NavItem open={open} key={item.id} {...item} />
+          ))}
+        {userData?.userType == "SystemUser" &&
+          userNavItems.map((item) => (
+            <NavItem open={open} key={item.id} {...item} />
+          ))}
       </ul>
       <button onClick={() => setOpenChangePassword(true)}>
-        <ChangePassword /> <span>Change Password</span>
+        <Lock /> <span>Change Password</span>
       </button>
       <ChangePasswordDialog
         open={openChangePassword}
         setOpen={setOpenChangePassword}
       />
-      <button onClick={logOutHandler}>
+      <button onClick={logOut}>
         <LogOut />
         <span>Logout</span>
       </button>
