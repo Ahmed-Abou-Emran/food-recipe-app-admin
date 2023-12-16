@@ -13,7 +13,7 @@ export const DeleteCategoryDialog = ({ id, refetchCategories }) => {
     axios
       .delete(`${categoriesURL}/${id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
       })
       .then((response) => {
@@ -52,7 +52,7 @@ export const AddCategoryDialog = ({ open, setOpen, refetchCategories }) => {
     axios
       .post(`${categoriesURL}`, data, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
       })
       .then((response) => {
@@ -111,7 +111,7 @@ export const UpdateCategoryDialog = ({
     axios
       .put(`${categoriesURL}/${id}`, data, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
       })
       .then((response) => {

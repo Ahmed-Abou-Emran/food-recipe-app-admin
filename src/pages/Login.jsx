@@ -5,13 +5,14 @@ import axios from "axios";
 import AuthLogo from "../assets/authLogo.png";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { CiLock as Lock } from "react-icons/ci";
 import { AiOutlineMail as Email } from "react-icons/ai";
-import Loader from "../ui/Loader";
 import PasswordInput from "../ui/PasswordInput";
+import { useUserContext } from "./UserProvider";
+
 function Login() {
   const [loading, setLoading] = React.useState(false);
   const [passwordVisibility, setPasswordVisibility] = React.useState(false);
+  const { loginHandler } = useUserContext();
   const navigate = useNavigate();
   const {
     register,
@@ -28,21 +29,22 @@ function Login() {
           position: "top-right",
         });
         // const decodedData = JSON.stringify(jwtDecode(res.data.token));
-        localStorage.setItem("adminToken", res.data.token);
-        setLoading(false);
+        const token = res.data.token;
+        loginHandler(token);
         navigate("/home");
       })
       .catch((err) => {
-        toast.error(`${err.response.data.message}`, {
+        toast.error(`${err.response?.data?.message}`, {
           position: "top-right",
         });
-
+      })
+      .finally(() => {
         setLoading(false);
       });
   };
 
   React.useEffect(() => {
-    if (localStorage.getItem("adminToken")) {
+    if (localStorage.getItem("authToken")) {
       navigate("/home");
     }
   }, [navigate]);
@@ -50,7 +52,9 @@ function Login() {
   return (
     <Wrapper>
       <LogoWrapper>
-        <img src={AuthLogo} alt="Logo" />
+        <Link to="/">
+          <img src={AuthLogo} alt="Logo" />
+        </Link>
       </LogoWrapper>
       <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <header>
@@ -90,7 +94,7 @@ function Login() {
             {loading ? "Loading ..." : "Login"}
           </button>
           <Links>
-            <Register to="register">Register Now</Register>
+            <Register to="/register">Register Now</Register>
             <Forget to="/forget-password">Forgot Password?</Forget>
           </Links>
         </main>

@@ -31,7 +31,7 @@ const ChangePasswordDialog = ({ open, setOpen }) => {
         data,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
         }
       )
@@ -53,7 +53,9 @@ const ChangePasswordDialog = ({ open, setOpen }) => {
     <FormDialog open={open} onOpenChange={setOpen}>
       <Wrapper>
         <LogoWrapper>
-          <img src={AuthLogo} alt="Logo" />
+          <Link to="/">
+            <img src={AuthLogo} alt="Logo" />
+          </Link>
         </LogoWrapper>
         <FormWrapper onSubmit={handleSubmit(onSubmit)}>
           <header>
@@ -126,9 +128,9 @@ const ChangePasswordDialog = ({ open, setOpen }) => {
               {loading ? "Loading..." : "Change Password"}
             </button>
 
-            <Links>
+            {/* <Links>
               <Login to="/login">Login Now?</Login>
-            </Links>
+            </Links> */}
           </main>
         </FormWrapper>
       </Wrapper>

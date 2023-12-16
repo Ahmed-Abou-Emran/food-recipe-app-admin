@@ -50,7 +50,7 @@ export const useUsers = () => {
     axios
       .get(`${usersURL}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
         params,
       })

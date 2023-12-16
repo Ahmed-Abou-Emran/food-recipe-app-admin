@@ -1,14 +1,14 @@
-import React from "react";
-import styled from "styled-components";
-import { useForm } from "react-hook-form";
 import axios from "axios";
-import AuthLogo from "../assets/authLogo.png";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import { CiLock as Lock } from "react-icons/ci";
-import { AiOutlineMail as Email } from "react-icons/ai";
+import { FiLock as Lock, FiMail as Email } from "react-icons/fi";
+import { useSearchParams } from "react-router-dom";
+import styled from "styled-components";
+import AuthLogo from "../assets/authLogo.png";
 import { PasswordInput } from "../ui";
-import Loader from "../ui/Loader";
+import { FiCheckCircle as Code } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 function ForgetPassword() {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -75,7 +75,9 @@ function ForgetPassword() {
   return (
     <Wrapper>
       <LogoWrapper>
-        <img src={AuthLogo} alt="Logo" />
+        <Link to="/">
+          <img src={AuthLogo} alt="Logo" />
+        </Link>
       </LogoWrapper>
       <Steps>
         <Step
@@ -147,7 +149,7 @@ function ForgetPassword() {
               {errors.email && <span>{errors.email.message}</span>}
             </InputWrapper>
             <InputWrapper>
-              <Lock size="1.5rem" />
+              <Code size="1.5rem" />
               <input
                 {...register("seed", {
                   required: "This field is required",
@@ -197,7 +199,7 @@ function ForgetPassword() {
                       " Password must be at least 6 characters, including UPPER/lowercase, numbers and special characters",
                   },
                 })}
-                type={passwordsVisibility.password ? "text" : "password"}
+                type={passwordsVisibility.confirmPassword ? "text" : "password"}
                 placeholder="Confirm New Password"
               />
             </PasswordInput>
@@ -337,6 +339,7 @@ const InputWrapper = styled.div`
     }
   }
   span {
+    padding-inline-start: var(--spacing-120);
     position: absolute;
     color: #ef4444;
     font-size: 0.75rem;

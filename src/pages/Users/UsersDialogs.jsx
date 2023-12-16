@@ -14,7 +14,7 @@ export const DeleteUserDialog = ({ id, refetchUsers }) => {
     axios
       .delete(`${usersURL}/${id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
       })
       .then((response) => {

@@ -6,33 +6,61 @@ export const UserContext = React.createContext();
 
 const UserProvider = ({ children }) => {
   const [userData, setUserData] = React.useState(null);
-  const adminToken = localStorage.getItem("adminToken");
+  const [authToken, setAuthToken] = React.useState(() =>
+    localStorage.getItem("authToken")
+  );
+
+  const loginHandler = (token) => {
+    localStorage.setItem("authToken", token);
+    setAuthToken(token);
+  };
+  const logOutHandler = () => {
+    localStorage.removeItem("authToken");
+    setAuthToken(null);
+  };
 
   React.useEffect(() => {
     const getCurrentUserData = () => {
       axios
         .get(`${usersURL}/currentUser`, {
           headers: {
-            Authorization: `Bearer ${adminToken}`,
+            Authorization: `Bearer ${authToken}`,
           },
         })
         .then((response) => {
-          setUserData(response?.data);
+          console.log(response?.data);
+          const resData = response?.data;
+          setUserData({
+            ...resData,
+            userType: resData?.group?.name,
+          });
         })
         .catch((error) => {});
     };
 
-    getCurrentUserData();
+    if (authToken) getCurrentUserData();
 
-    if (adminToken) {
-      const decodedToken = jwtDecode(adminToken);
+    if (authToken) {
+      const decodedToken = jwtDecode(authToken);
       setUserData(decodedToken);
+    } else {
+      setUserData(null);
     }
-  }, [adminToken]);
+  }, [authToken]);
 
   return (
-    <UserContext.Provider value={userData}>{children}</UserContext.Provider>
+    <UserContext.Provider
+      value={{ userData, setUserData, loginHandler, logOutHandler, authToken }}
+    >
+      {children}
+    </UserContext.Provider>
   );
+};
+
+export const useUserContext = () => {
+  let { userData, loginHandler, logOutHandler } = React.useContext(UserContext);
+
+  return { userData, loginHandler, logOutHandler };
 };
 
 export default UserProvider;

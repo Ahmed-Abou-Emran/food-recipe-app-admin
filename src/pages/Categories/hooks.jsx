@@ -24,7 +24,7 @@ export const useCategories = () => {
       axios
         .get(`${categoriesURL}`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
           params,
         })

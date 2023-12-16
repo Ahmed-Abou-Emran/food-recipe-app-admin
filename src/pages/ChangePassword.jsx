@@ -27,14 +27,14 @@ function ChangePassword() {
     axios
       .put("https://upskilling-egypt.com/api/v1/Users/ChangePassword", data, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
       })
       .then((res) => {
         toast.success("Password Changed Successfully", {
           position: "top-right",
         });
-        localStorage.setItem("adminToken", res.data.token);
+        localStorage.setItem("authToken", res.data.token);
         setLoading(false);
       })
       .catch((err) => {
@@ -49,7 +49,9 @@ function ChangePassword() {
   return (
     <Wrapper>
       <LogoWrapper>
-        <img src={AuthLogo} alt="Logo" />
+        <Link to="/">
+          <img src={AuthLogo} alt="Logo" />
+        </Link>
       </LogoWrapper>
       <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <header>

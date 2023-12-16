@@ -2,17 +2,17 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 function ProtectedRoute({ children }) {
   const navigate = useNavigate();
-  // const adminToken = localStorage.getItem("adminToken");
+  // const authToken = localStorage.getItem("authToken");
 
-  const adminToken = localStorage.getItem("adminToken");
+  const authToken = localStorage.getItem("authToken");
 
   React.useEffect(() => {
-    if (!adminToken) {
+    if (!authToken) {
       navigate("/login");
     }
   }, []);
 
-  if (adminToken) {
+  if (authToken) {
     return children;
   }
 }
