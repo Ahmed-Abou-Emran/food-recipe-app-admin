@@ -10,10 +10,10 @@ export const useUpdateParams = () => {
 
 export const useFavoriteRecipes = () => {
   const [isLoading, setIsLoading] = React.useState(false);
-  const { params, updateParams, recipes, setFavoriteRecipes } =
+  const { params, updateParams, favoriteRecipes, setFavoriteRecipes } =
     React.useContext(FavoriteRecipesContext);
   const [totalNumberOfPages, setTotalNumberOfPages] = React.useState(null);
-  const refetchRecipes = () => {
+  const refetchFavoriteRecipes = () => {
     updateParams(params);
   };
   React.useEffect(() => {
@@ -46,9 +46,9 @@ export const useFavoriteRecipes = () => {
   }, [params]);
 
   return {
-    recipes,
+    favoriteRecipes,
     totalNumberOfPages,
-    refetchRecipes,
+    refetchFavoriteRecipes,
     isLoading,
   };
 };
