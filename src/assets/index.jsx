@@ -4,4 +4,13 @@ import HeaderHome from "./header-home.svg";
 import HeaderRecipes from "./header-recipes.svg";
 import NotFound from "./notFound.svg";
 import NoData from "./NoData.svg";
-export { SideBarLogo, HeaderBg, HeaderHome, HeaderRecipes, NotFound, NoData };
+import DefaultFood from "./defaultFood.png";
+export {
+  DefaultFood,
+  SideBarLogo,
+  HeaderBg,
+  HeaderHome,
+  HeaderRecipes,
+  NotFound,
+  NoData,
+};
