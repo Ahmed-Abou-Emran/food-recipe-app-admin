@@ -7,7 +7,7 @@ import { UserContext } from "../../pages/UserProvider";
 import { FaRegUserCircle as RegularUser } from "react-icons/fa";
 
 function NavBar() {
-  const userData = React.useContext(UserContext);
+  const { userData } = React.useContext(UserContext);
 
   return (
     <Wrapper>

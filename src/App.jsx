@@ -19,6 +19,7 @@ import CategoriesProvider from "./pages/Categories/CategoriesProvider";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import { AppLayout, AuthLayout } from "./ui";
 import RecipesProvider from "./pages/Recipes/RecipesProvider";
+import FavoriteRecipesProvider from "./pages/Favorites/FavoritesProvider";
 
 const router = createBrowserRouter([
   {
@@ -27,9 +28,11 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <UsersProvider>
           <RecipesProvider>
-            <CategoriesProvider>
-              <AppLayout />
-            </CategoriesProvider>
+            <FavoriteRecipesProvider>
+              <CategoriesProvider>
+                <AppLayout />
+              </CategoriesProvider>
+            </FavoriteRecipesProvider>
           </RecipesProvider>
         </UsersProvider>
       </ProtectedRoute>

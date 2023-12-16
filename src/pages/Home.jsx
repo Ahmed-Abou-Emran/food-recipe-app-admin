@@ -3,23 +3,28 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FaArrowRightLong as RightArrow } from "react-icons/fa6";
 import DialogDemo, { DeleteDialog } from "../ui/Dialog/Dialog";
+import { useUserContext } from "./UserProvider";
 
 function Home() {
+  const { userData } = useUserContext();
+  const action = userData?.userType === "SuperAdmin" ? "Fill" : "View";
   return (
     <>
       <Wrapper>
         <Left>
           <h3>
-            Fill the <span>Recipes</span> !
+            {action} the <span>Recipes</span>!
           </h3>
           <p>
-            you can now fill the meals easily using the table and form , click
-            here and fill it with the table !
+            You can now {action} the meals easily using the table and form.
+            Click
+            <span> here</span> to {action} it with the table!
           </p>
         </Left>
+
         <Right>
           <LinkButton to="/recipes">
-            Fill Recipes <RightArrow />
+            {action} Recipes <RightArrow />
           </LinkButton>
         </Right>
       </Wrapper>

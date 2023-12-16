@@ -1,14 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import axios from "axios";
 import { formatCurrency, range } from "../../utils/helpers";
-import { IoFastFoodOutline as RecipesIcon } from "react-icons/io5";
-import { FaRegEdit as Edit } from "react-icons/fa";
-import { FiHeart as Heart } from "react-icons/fi";
-import {
-  GrCaretNext as Next,
-  GrCaretPrevious as Previous,
-} from "react-icons/gr";
-
+import { toast } from "react-hot-toast";
 import { useCategories } from "../Categories/hooks";
 import { useUpdateParams, useRecipes, useTags } from "./hooks";
 import {
@@ -18,6 +12,15 @@ import {
 } from "./RecipesDialogs";
 import { NoData, Loader } from "../../ui";
 import { useUserContext } from "../UserProvider";
+
+import {
+  GrCaretNext as Next,
+  GrCaretPrevious as Previous,
+} from "react-icons/gr";
+import { IoFastFoodOutline as RecipesIcon } from "react-icons/io5";
+import { FaRegEdit as Edit } from "react-icons/fa";
+import { FiHeart as Heart } from "react-icons/fi";
+import { favoriteRecipesURL } from "../../services/END_POINTS";
 
 function Recipes() {
   const { userData } = useUserContext();
@@ -43,6 +46,30 @@ function Recipes() {
     setOpenEdit(true);
   };
 
+  const addToFavorite = (id) => {
+    console.log(id);
+    axios
+      .post(
+        `${favoriteRecipesURL}`,
+        { recipeId: id },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      )
+      .then((response) => {
+        toast.success(
+          response?.data?.message || "The recipe is added to favorites"
+        );
+      })
+      .catch((error) => {
+        toast.error(
+          error?.data?.data?.message ||
+            "Something Went wrong, Unable to add the recipe to favorites"
+        );
+      });
+  };
   return (
     <Wrapper>
       <AddNewItemWrapper>
@@ -134,13 +161,17 @@ function Recipes() {
               return (
                 <Row key={id}>
                   <div>{name}</div>
-                  <ImageWrapper>
-                    {imagePath ? (
-                      <img src={`https://upskilling-egypt.com/${imagePath}`} />
-                    ) : (
-                      <RecipesIcon />
-                    )}
-                  </ImageWrapper>
+                  <div>
+                    <ImageWrapper>
+                      {imagePath ? (
+                        <img
+                          src={`https://upskilling-egypt.com/${imagePath}`}
+                        />
+                      ) : (
+                        <RecipesIcon />
+                      )}
+                    </ImageWrapper>
+                  </div>
                   <div>{formatCurrency(price)}</div>
                   <div>{description}</div>
                   <div>{category[0]?.name || "---"}</div>
@@ -157,7 +188,7 @@ function Recipes() {
                         />
                       </>
                     ) : (
-                      <ActionTrigger>
+                      <ActionTrigger onClick={() => addToFavorite(id)}>
                         <Heart />
                       </ActionTrigger>
                     )}
@@ -227,6 +258,7 @@ function Recipes() {
     </Wrapper>
   );
 }
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -332,6 +364,7 @@ const Header = styled.div`
   div {
     display: flex;
     justify-content: center;
+    text-align: center;
   }
 `;
 const Body = styled.div`
@@ -349,6 +382,7 @@ const Row = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
   }
 `;
 
@@ -369,6 +403,7 @@ const ActionTrigger = styled.button`
     stroke-width: 1px;
     &:hover {
       color: var(--grey-800);
+      /* transform: scale(2) rotate(2turn); */
       transform: scale(2);
       outline: none;
       fill: red;

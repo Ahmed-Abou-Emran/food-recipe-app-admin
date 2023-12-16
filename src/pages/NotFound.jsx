@@ -9,9 +9,9 @@ function NotFound() {
     <Wrapper>
       <ContentWrapper>
         <LogoWrapper>
-          <LogoLink to="/">
+          <Link to="/">
             <img src={Logo} alt="Logo" />
-          </LogoLink>
+          </Link>
         </LogoWrapper>
         <Content>
           <h2>Opps.</h2>
@@ -104,10 +104,6 @@ const LogoWrapper = styled.div`
   img {
     height: 100%;
   }
-`;
-
-const LogoLink = styled(Link)`
-  text-decoration: none;
 `;
 
 export default NotFound;
