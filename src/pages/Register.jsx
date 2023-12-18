@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { FiCheckCircle as Code } from "react-icons/fi";
 import { Link } from "react-router-dom";
-
 import {
   FiUser as User,
   FiGlobe as Country,
@@ -17,6 +16,9 @@ import styled from "styled-components";
 import AuthLogo from "../assets/authLogo.png";
 import { PasswordInput } from "../ui";
 import { usersURL } from "../services/END_POINTS";
+
+const phoneRegEx =
+  /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
 
 function Register() {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -156,10 +158,10 @@ function Register() {
               <input
                 {...register("phoneNumber", {
                   required: "This field is required ",
-                  // pattern: {
-                  //   value: /^\S+@\S+\.\S+$/,
-                  //   message: "Invalid Phone Number",
-                  // },
+                  pattern: {
+                    value: phoneRegEx,
+                    message: "Not a Valid Phone Number",
+                  },
                 })}
                 type="text"
                 placeholder="Phone Number"
@@ -269,17 +271,23 @@ function Register() {
 }
 
 const Wrapper = styled.div`
-  width: clamp(30rem, 65%, 50rem);
-  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background: var(--grey-100);
-  padding-inline: var(--spacing-200);
-  padding-block: var(--spacing-100);
   gap: var(--spacing-40);
   border-radius: 1rem;
+
+  width: clamp(30rem, 65%, 50rem);
+  max-width: 100%;
+  padding-inline: clamp(1rem, 0.2rem + 4vw, 5rem);
+  padding-block: clamp(0.5rem, 1rem + 2vw, 2.5rem);
+  @media (max-width: 70rem) {
+    width: 100%;
+    min-height: 100%;
+    border-radius: revert;
+  }
 `;
 
 const LogoWrapper = styled.div`
