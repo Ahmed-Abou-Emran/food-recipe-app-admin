@@ -1,4 +1,6 @@
 # Food Recipes React Application
+![image](https://github.com/Ahmed-Abou-Emran/food-recipe-app-admin/assets/64327685/6882da01-272c-40ab-b4e4-16e7f6b0d604)
+
 
 Food Recipes is a web application that serves as a platform for managing and sharing food recipes. It features two portals: a user portal and an admin portal, each equipped with complete authentication functionalities, including registration, login, forget password, and change password.
 
@@ -6,11 +8,14 @@ Food Recipes is a web application that serves as a platform for managing and sha
 
 - [Food Recipes React Application](#food-recipes-react-application)
   - [Table of Contents](#table-of-contents)
-  - [Introduction ](#introduction-)
-  - [Features ](#features-)
-  - [Usage ](#usage-)
+  - [Demo ](#demo)
+  - [Introduction ](#introduction)
+  - [Features ](#features)
+  - [Usage ](#usage)
   - [Technologies and Packages Used ](#technologies-and-packages-used-)
 
+## Demo <a name="demo"></a>
+<a href="https://youtu.be/HyEEGYNKh0Q">Demo Link</a>
 ## Introduction <a name="introduction"></a>
 
 Foodie Recipes is a versatile food recipe application with user and admin portals. The user portal allows users to view recipes added by admins, add recipes to their favorites, and remove them. The admin portal, on the other hand, provides administrators with the capability to add, edit, and delete food categories and recipes. Admins can also manage system users, deleting non-admin users as needed.
