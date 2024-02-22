@@ -5,16 +5,11 @@ import axios from "axios";
 import AuthLogo from "../assets/authLogo.png";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
-import PasswordInput from "../ui/PasswordInput";
+import { PasswordIconInput } from "./inputs";
 import Loader from "../ui/Loader";
 import { FormDialog } from "./Dialog/Dialog";
 
 const ChangePasswordDialog = ({ open, setOpen }) => {
-  const [passwordsVisibility, setPasswordsVisibility] = React.useState({
-    oldPassword: false,
-    newPassword: false,
-    confirmNewPassword: false,
-  });
   const [loading, setLoading] = React.useState(false);
   const {
     register,
@@ -63,66 +58,31 @@ const ChangePasswordDialog = ({ open, setOpen }) => {
             <p> Enter your details below</p>
           </header>
           <main>
-            <PasswordInput
-              showPassword={passwordsVisibility.oldPassword}
-              togglePassword={() => {
-                setPasswordsVisibility((prev) => ({
-                  ...prev,
-                  oldPassword: !prev.oldPassword,
-                }));
-              }}
+            <PasswordIconInput
               error={errors?.oldPassword?.message}
-            >
-              <input
-                {...register("oldPassword", {
-                  required: "This field is required",
-                })}
-                type={passwordsVisibility.oldPassword ? "text" : "password"}
-                placeholder="Old Password"
-              />
-            </PasswordInput>
-            <PasswordInput
-              showPassword={passwordsVisibility.newPassword}
-              togglePassword={() => {
-                setPasswordsVisibility((prev) => ({
-                  ...prev,
-                  newPassword: !prev.newPassword,
-                }));
-              }}
+              {...register("oldPassword", {
+                required: "This field is required",
+              })}
+              placeholder="Old Password"
+            />
+            <PasswordIconInput
               error={errors?.newPassword?.message}
-            >
-              <input
-                {...register("newPassword", {
-                  required: "This field is required",
-                })}
-                type={passwordsVisibility.newPassword ? "text" : "password"}
-                placeholder="New Password"
-              />
-            </PasswordInput>
+              {...register("newPassword", {
+                required: "This field is required",
+              })}
+              placeholder="New Password"
+            />
 
-            <PasswordInput
-              showPassword={passwordsVisibility.confirmNewPassword}
-              togglePassword={() => {
-                setPasswordsVisibility((prev) => ({
-                  ...prev,
-                  confirmNewPassword: !prev.confirmNewPassword,
-                }));
-              }}
+            <PasswordIconInput
               error={errors?.confirmNewPassword?.message}
-            >
-              <input
-                {...register("confirmNewPassword", {
-                  required: "This field is required",
-                  validate: (value) =>
-                    value === getValues("newPassword") ||
-                    "The passwords do not match",
-                })}
-                type={
-                  passwordsVisibility.confirmNewPassword ? "text" : "password"
-                }
-                placeholder="Confirm New Password"
-              />
-            </PasswordInput>
+              {...register("confirmNewPassword", {
+                required: "This field is required",
+                validate: (value) =>
+                  value === getValues("newPassword") ||
+                  "The passwords do not match",
+              })}
+              placeholder="Confirm New Password"
+            />
 
             <button disabled={loading}>
               {loading ? "Loading..." : "Change Password"}
