@@ -13,11 +13,13 @@ function Header() {
     HeaderContents[currentPath] || HeaderContents.home;
   return (
     <Wrapper>
-      <h3>
-        {h3}
-        {currentPath === "home" ? userData?.userName : null}
-      </h3>
-      <p>{paragraph}</p>
+      <ContentWrapper>
+        <h3>
+          {h3}
+          {currentPath === "home" ? userData?.userName : null}
+        </h3>
+        <p>{paragraph}</p>
+      </ContentWrapper>
       <ImageWrapper>
         <img src={imagePath} />
       </ImageWrapper>
@@ -27,28 +29,22 @@ function Header() {
 
 const Wrapper = styled.header`
   grid-area: header;
-  /* background-image: url("./src/assets/test.svg");
-  background-position: cover;
-  background-size: 100% 100%; */
-
   background-image: url("./src/assets/header-bg.svg"),
     linear-gradient(to right, var(--green-700), var(--green-600));
   background-position: center;
-  background-size: 100% 100%;
-  height: 15rem;
-  /* width: 100%; */
-  padding-inline-start: var(--spacing-160);
-
+  background-size: cover;
+  padding-inline: clamp(1rem, 0.4rem + 3vw, 4rem);
+  padding-block: var(--spacing-80);
   border-radius: 1rem;
-  position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
+  justify-content: space-between;
+
+  align-items: center;
+  gap: var(--spacing-80);
 
   color: var(--grey-100);
   h3 {
-    font-size: 2.5rem;
+    font-size: clamp(2rem, 1.8rem + 1vw, 3rem);
   }
   p {
     max-width: 30rem;
@@ -57,13 +53,25 @@ const Wrapper = styled.header`
     line-height: 1.5;
     letter-spacing: 0.03rem;
   }
+
+  @media (max-width: 72rem) {
+    flex-direction: column;
+    justify-content: center;
+  }
 `;
 
+const ContentWrapper = styled.div`
+  @media (max-width: 72rem) {
+    text-align: center;
+
+    h3 {
+      line-height: 1.1;
+      margin-block-end: var(--spacing-50);
+    }
+  }
+`;
 const ImageWrapper = styled.div`
   height: 12rem;
-  position: absolute;
-  right: 4rem;
-  bottom: 0.5rem;
   /* transition: all 300ms ease-in-out; */
   animation: flying 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 

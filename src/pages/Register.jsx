@@ -53,7 +53,7 @@ function Register() {
   const onSubmit = (data) => {
     setIsLoading(true);
     axios
-      .post(
+      .put(
         // "https://upskilling-egypt.com:443/api/v1/Users/verify",
         `${usersURL}/${step === 1 ? "Register" : "verify"}`,
         step === 1 ? data : { email: data.email, code: data.code }

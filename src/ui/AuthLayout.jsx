@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Outlet, useNavigate } from "react-router-dom";
 
 function AuthLayout() {
-  const navigate = useNavigate();
   return (
     <Wrapper>
       <Outlet />
@@ -26,6 +25,11 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 70rem) {
+    height: auto;
+    min-height: 100%;
+  }
 `;
 
 export default AuthLayout;

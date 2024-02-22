@@ -50,6 +50,10 @@ const Wrapper = styled.nav`
     0.8px 1.6px 2px -0.8px hsl(var(--grey-900) / 0.36),
     2.1px 4.1px 5.2px -1.7px hsl(var(--grey-900) / 0.36),
     5px 10px 12.6px -2.5px hsl(var(--grey-900) / 0.36);
+
+  svg {
+    flex-shrink: 0;
+  }
 `;
 
 const SearchForm = styled.form`
@@ -82,6 +86,7 @@ const SearchForm = styled.form`
   }
 
   button {
+    flex-shrink: 0;
     height: 100%;
     border: none;
     background: none;

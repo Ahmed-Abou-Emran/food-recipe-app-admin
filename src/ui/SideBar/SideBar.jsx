@@ -19,7 +19,6 @@ function SideBar() {
 
 const Wrapper = styled.aside`
   position: sticky;
-  top: 0;
   height: 100svh;
   position: sticky;
   top: 0;

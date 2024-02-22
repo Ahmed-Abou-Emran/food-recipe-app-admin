@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FaArrowRightLong as RightArrow } from "react-icons/fa6";
-import DialogDemo, { DeleteDialog } from "../ui/Dialog/Dialog";
 import { useUserContext } from "./UserProvider";
 
 function Home() {
@@ -35,12 +34,18 @@ function Home() {
 const Wrapper = styled.div`
   font-family: Roboto;
   background-color: var(--green-100);
-  padding-inline: var(--spacing-160) var(--spacing-100);
-  padding-block: var(--spacing-100);
+  padding-inline: clamp(1rem, 0.4rem + 3vw, 4rem);
+  padding-block: clamp(1rem, 0.6rem + 2vw, 3rem);
   border-radius: 0.5rem;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 60rem) {
+    justify-content: center;
+  }
 `;
 
 const Left = styled.div`
@@ -62,6 +67,10 @@ const Left = styled.div`
     font-weight: 400;
     line-height: 1.5;
     letter-spacing: 0.04rem;
+  }
+
+  @media (max-width: 60rem) {
+    text-align: center;
   }
 `;
 const Right = styled.div``;
