@@ -1,6 +1,5 @@
 import Register from "./Register";
 import Login from "./Login";
-import ChangePassword from "./ChangePassword";
 import ForgetPassword from "./ForgetPassword";
 import NotFound from "./NotFound";
 import Home from "./Home";
@@ -13,7 +12,6 @@ import Favorites from "./Favorites/favorites";
 export {
   Register,
   Login,
-  ChangePassword,
   NotFound,
   Home,
   Users,

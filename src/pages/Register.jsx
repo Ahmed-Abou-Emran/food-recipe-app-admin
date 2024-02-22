@@ -13,8 +13,7 @@ import {
 
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import AuthLogo from "../assets/authLogo.png";
-import { PasswordInput } from "../ui";
+import { PasswordIconInput } from "../ui/inputs";
 import { usersURL } from "../services/END_POINTS";
 
 const phoneRegEx =
@@ -23,10 +22,6 @@ const phoneRegEx =
 function Register() {
   const [isLoading, setIsLoading] = React.useState(false);
   let [searchParams, setSearchParams] = useSearchParams({ step: 1 });
-  const [passwordsVisibility, setPasswordsVisibility] = React.useState({
-    password: false,
-    confirmPassword: false,
-  });
   const [step, setStep] = React.useState(() => +searchParams.get("step") || 1);
   const [userInput, setUserInput] = React.useState({
     email: "",
@@ -83,12 +78,7 @@ function Register() {
   };
 
   return (
-    <Wrapper>
-      <LogoWrapper>
-        <Link to="/">
-          <img src={AuthLogo} alt="Logo" />
-        </Link>
-      </LogoWrapper>
+    <>
       <Steps>
         <Step
           style={{ backgroundColor: step === 1 ? "var(--green-700)" : null }}
@@ -169,35 +159,18 @@ function Register() {
               {errors.phoneNumber && <span>{errors.phoneNumber.message}</span>}
             </InputWrapper>
 
-            <PasswordInput
-              error={errors?.password?.message}
-              showPassword={passwordsVisibility.password}
-              togglePassword={() => {
-                setPasswordsVisibility((prev) => ({
-                  ...prev,
-                  password: !prev.password,
-                }));
-              }}
-            >
-              <input
+            <InputWrapper>
+              <PasswordIconInput
+                error={errors?.password?.message}
                 {...register("password", {
                   required: "This field is required",
                 })}
-                type={passwordsVisibility.password ? "text" : "password"}
                 placeholder="New Password"
               />
-            </PasswordInput>
-            <PasswordInput
-              error={errors?.confirmPassword?.message}
-              showPassword={passwordsVisibility.confirmPassword}
-              togglePassword={() => {
-                setPasswordsVisibility((prev) => ({
-                  ...prev,
-                  confirmPassword: !prev.confirmPassword,
-                }));
-              }}
-            >
-              <input
+            </InputWrapper>
+            <InputWrapper>
+              <PasswordIconInput
+                error={errors?.confirmPassword?.message}
                 {...register("confirmPassword", {
                   required: "This field is required",
                   validate: (value) =>
@@ -209,10 +182,9 @@ function Register() {
                       " Password must be at least 6 characters, including UPPER/lowercase, numbers and special characters",
                   },
                 })}
-                type={passwordsVisibility.confirmPassword ? "text" : "password"}
                 placeholder="Confirm Password"
               />
-            </PasswordInput>
+            </InputWrapper>
             <button disabled={isLoading}>
               {isLoading ? "Loading..." : "Register"}
             </button>
@@ -266,36 +238,9 @@ function Register() {
           </main>
         </FormWrapper>
       )}
-    </Wrapper>
+    </>
   );
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: var(--grey-100);
-  gap: var(--spacing-40);
-  border-radius: 1rem;
-
-  width: clamp(30rem, 65%, 50rem);
-  max-width: 100%;
-  padding-inline: clamp(1rem, 0.2rem + 4vw, 5rem);
-  padding-block: clamp(0.5rem, 1rem + 2vw, 2.5rem);
-  @media (max-width: 70rem) {
-    width: 100%;
-    min-height: 100%;
-    border-radius: revert;
-  }
-`;
-
-const LogoWrapper = styled.div`
-  height: 6rem;
-  img {
-    height: 100%;
-  }
-`;
 
 const Steps = styled.nav`
   display: flex;
@@ -352,7 +297,7 @@ const FormWrapper = styled.form`
       border-radius: 0.5rem;
     }
 
-    button {
+    button:last-child {
       grid-column: 1/-1;
       padding-block: var(--spacing-30);
       margin-block: var(--spacing-20);
@@ -410,6 +355,29 @@ const InputWrapper = styled.div`
     font-weight: 500;
     bottom: -5px;
     transform: translateY(100%);
+  }
+
+  input + button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    position: absolute;
+    width: 3rem;
+    right: 0;
+    padding-inline: var(--spacing-20);
+    background: var(--green-100) !important;
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:focus {
+      outline: 2px solid var(--green-500);
+    }
+
+    svg {
+      color: var(--green-800);
+    }
   }
 `;
 
