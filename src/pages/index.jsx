@@ -1,6 +1,4 @@
-import Register from "./Register";
-import Login from "./Login";
-import ForgetPassword from "./ForgetPassword";
+import { Register, Login, ForgetPassword } from "./Authentication";
 import NotFound from "./NotFound";
 import Home from "./Home";
 import Users from "./Users";

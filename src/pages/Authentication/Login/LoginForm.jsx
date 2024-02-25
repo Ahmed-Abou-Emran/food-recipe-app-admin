@@ -6,8 +6,8 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineMail as Email } from "react-icons/ai";
-import { useUserContext } from "../UserProvider";
-import { ErrorIconInput, PasswordIconInput } from "../../ui/inputs";
+import { useUserContext } from "../../UserProvider";
+import { ErrorIconInput, PasswordIconInput } from "../../../ui/inputs";
 
 const LoginForm = () => {
   const [loading, setLoading] = React.useState(false);
@@ -71,7 +71,9 @@ const LoginForm = () => {
           />
         </InputWrapper>
 
-        <button disabled={loading}>{loading ? "Loading ..." : "Login"}</button>
+        <button disabled={loading}>
+          {loading ? "Letting you In ⌛" : "Login"}
+        </button>
         <Links>
           <Register to="/register">Register Now</Register>
           <Forget to="/forget-password">Forgot Password?</Forget>
@@ -184,27 +186,23 @@ const Links = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+
+  a {
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    &:hover {
+      text-decoration: underline;
+    }
+    transition: text-decoration 0.2s ease-in-out;
+  }
 `;
 const Register = styled(Link)`
   color: var(--green-950);
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 500;
-  &:hover {
-    text-decoration: underline;
-  }
-  transition: text-decoration 0.2s ease-in-out;
 `;
 
 const Forget = styled(Link)`
   color: var(--green-600);
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 500;
-  &:hover {
-    text-decoration: underline;
-  }
-
-  transition: text-decoration 0.2s ease-in-out;
 `;
+
 export default LoginForm;

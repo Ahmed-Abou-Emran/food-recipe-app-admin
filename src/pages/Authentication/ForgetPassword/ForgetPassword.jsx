@@ -5,12 +5,10 @@ import { toast } from "react-hot-toast";
 import { FiLock as Lock, FiMail as Email } from "react-icons/fi";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import AuthLogo from "../assets/authLogo.png";
-import { PasswordIconInput } from "../ui/inputs";
+import { PasswordIconInput } from "../../../ui/inputs";
 import { FiCheckCircle as Code } from "react-icons/fi";
-import { Link } from "react-router-dom";
 
-function ForgetPassword() {
+export const ForgetPassword = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   let [searchParams, setSearchParams] = useSearchParams({ step: 1 });
   const [step, setStep] = React.useState(() => +searchParams.get("step") || 1);
@@ -185,7 +183,7 @@ function ForgetPassword() {
       )}
     </>
   );
-}
+};
 
 const Steps = styled.nav`
   display: flex;
@@ -324,5 +322,3 @@ const InputWrapper = styled.div`
     }
   }
 `;
-
-export default ForgetPassword;

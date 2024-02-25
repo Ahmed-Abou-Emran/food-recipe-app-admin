@@ -13,8 +13,8 @@ import {
 
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { PasswordIconInput } from "../ui/inputs";
-import { usersURL } from "../services/END_POINTS";
+import { PasswordIconInput } from "../../../ui/inputs";
+import { usersURL } from "../../../services/END_POINTS";
 
 const phoneRegEx =
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
