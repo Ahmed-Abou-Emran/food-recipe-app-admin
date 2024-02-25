@@ -8,7 +8,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineMail as Email } from "react-icons/ai";
 import { useUserContext } from "../../UserProvider";
 import { ErrorIconInput, PasswordIconInput } from "../../../ui/inputs";
-
+import {
+  EmailValidation,
+  PasswordValidation,
+} from "../../../services/VALIDATIONS";
 const LoginForm = () => {
   const [loading, setLoading] = React.useState(false);
   const { loginHandler } = useUserContext();
@@ -52,13 +55,7 @@ const LoginForm = () => {
           <ErrorIconInput
             icon={Email}
             error={errors?.email?.message}
-            {...register("email", {
-              required: "This field is required ",
-              pattern: {
-                value: /^\S+@\S+\.\S+$/,
-                message: "Invalid email address",
-              },
-            })}
+            {...register("email", EmailValidation)}
             type="email"
             placeholder="Enter your email"
           />
@@ -66,7 +63,7 @@ const LoginForm = () => {
         <InputWrapper>
           <PasswordIconInput
             error={errors?.password?.message}
-            {...register("password", { required: "This field is required" })}
+            {...register("password", PasswordValidation)}
             placeholder="Password"
           />
         </InputWrapper>

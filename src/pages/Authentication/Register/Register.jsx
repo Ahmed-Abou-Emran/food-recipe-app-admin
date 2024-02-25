@@ -15,9 +15,11 @@ import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { PasswordIconInput } from "../../../ui/inputs";
 import { usersURL } from "../../../services/END_POINTS";
-
-const phoneRegEx =
-  /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
+import {
+  EmailValidation,
+  PasswordValidation,
+  PhoneValidation,
+} from "../../../services/VALIDATIONS";
 
 function Register() {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -117,13 +119,7 @@ function Register() {
             <InputWrapper>
               <Email size="1.5rem" />
               <input
-                {...register("email", {
-                  required: "This field is required ",
-                  pattern: {
-                    value: /^\S+@\S+\.\S+$/,
-                    message: "Invalid email address",
-                  },
-                })}
+                {...register("email", EmailValidation)}
                 type="text"
                 placeholder="Email"
               />
@@ -146,13 +142,7 @@ function Register() {
             <InputWrapper>
               <Phone size="1.5rem" />
               <input
-                {...register("phoneNumber", {
-                  required: "This field is required ",
-                  pattern: {
-                    value: phoneRegEx,
-                    message: "Not a Valid Phone Number",
-                  },
-                })}
+                {...register("phoneNumber", PhoneValidation)}
                 type="text"
                 placeholder="Phone Number"
               />
@@ -162,9 +152,7 @@ function Register() {
             <InputWrapper>
               <PasswordIconInput
                 error={errors?.password?.message}
-                {...register("password", {
-                  required: "This field is required",
-                })}
+                {...register("password", PasswordValidation)}
                 placeholder="New Password"
               />
             </InputWrapper>
@@ -172,20 +160,14 @@ function Register() {
               <PasswordIconInput
                 error={errors?.confirmPassword?.message}
                 {...register("confirmPassword", {
-                  required: "This field is required",
                   validate: (value) =>
                     getValues("password") === value || "Passwords don't match",
-                  pattern: {
-                    value:
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
-                    message:
-                      " Password must be at least 6 characters, including UPPER/lowercase, numbers and special characters",
-                  },
+                  ...PasswordValidation,
                 })}
                 placeholder="Confirm Password"
               />
             </InputWrapper>
-            <button disabled={isLoading}>
+            <button type="submit" disabled={isLoading}>
               {isLoading ? "Loading..." : "Register"}
             </button>
           </main>
@@ -208,13 +190,7 @@ function Register() {
             <InputWrapper>
               <Email size="1.5rem" />
               <input
-                {...register("email", {
-                  required: "This field is required ",
-                  pattern: {
-                    value: /^\S+@\S+\.\S+$/,
-                    message: "Invalid email address",
-                  },
-                })}
+                {...register("email", EmailValidation)}
                 type="text"
                 placeholder="Email"
               />
@@ -232,7 +208,7 @@ function Register() {
               {errors.code && <span>{errors.code.message}</span>}
             </InputWrapper>
 
-            <button disabled={isLoading}>
+            <button type="submit" disabled={isLoading}>
               {isLoading ? "Loading..." : "Verify"}
             </button>
           </main>
@@ -285,7 +261,7 @@ const FormWrapper = styled.form`
   }
   main {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
     gap: var(--spacing-70);
     width: 100%;
 
@@ -297,10 +273,10 @@ const FormWrapper = styled.form`
       border-radius: 0.5rem;
     }
 
-    button:last-child {
+    button[type="submit"] {
       grid-column: 1/-1;
       padding-block: var(--spacing-30);
-      margin-block: var(--spacing-20);
+      margin-block: var(--spacing-100) var(--spacing-20);
       background-color: var(--green-500);
       color: var(--grey-100);
       border: none;

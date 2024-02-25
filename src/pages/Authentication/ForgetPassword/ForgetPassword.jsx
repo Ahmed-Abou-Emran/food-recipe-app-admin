@@ -7,6 +7,10 @@ import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { PasswordIconInput } from "../../../ui/inputs";
 import { FiCheckCircle as Code } from "react-icons/fi";
+import {
+  EmailValidation,
+  PasswordValidation,
+} from "../../../services/VALIDATIONS";
 
 export const ForgetPassword = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -95,13 +99,7 @@ export const ForgetPassword = () => {
             <InputWrapper>
               <Email size="1.5rem" />
               <input
-                {...register("email", {
-                  required: "This field is required ",
-                  pattern: {
-                    value: /^\S+@\S+\.\S+$/,
-                    message: "Invalid email address",
-                  },
-                })}
+                {...register("email", EmailValidation)}
                 type="text"
                 placeholder="Email"
               />
@@ -126,13 +124,7 @@ export const ForgetPassword = () => {
             <InputWrapper>
               <Email size="1.5rem" />
               <input
-                {...register("email", {
-                  required: "This field is required ",
-                  pattern: {
-                    value: /^\S+@\S+\.\S+$/,
-                    message: "Invalid email address",
-                  },
-                })}
+                {...register("email", EmailValidation)}
                 type="text"
                 placeholder="Email"
               />
@@ -152,9 +144,7 @@ export const ForgetPassword = () => {
             <InputWrapper>
               <PasswordIconInput
                 error={errors?.password?.message}
-                {...register("password", {
-                  required: "This field is required",
-                })}
+                {...register("password", PasswordValidation)}
                 placeholder="New Password"
               />
             </InputWrapper>
@@ -162,15 +152,9 @@ export const ForgetPassword = () => {
               <PasswordIconInput
                 error={errors?.confirmPassword?.message}
                 {...register("confirmPassword", {
-                  required: "This field is required",
                   validate: (value) =>
                     getValues("password") === value || "Passwords don't match",
-                  pattern: {
-                    value:
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
-                    message:
-                      " Password must be at least 6 characters, including UPPER/lowercase, numbers and special characters",
-                  },
+                  ...PasswordValidation,
                 })}
                 placeholder="Confirm New Password"
               />
