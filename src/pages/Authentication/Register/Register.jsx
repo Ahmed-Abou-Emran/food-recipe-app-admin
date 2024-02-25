@@ -23,17 +23,9 @@ import {
 
 function Register() {
   const [isLoading, setIsLoading] = React.useState(false);
-  let [searchParams, setSearchParams] = useSearchParams({ step: 1 });
-  const [step, setStep] = React.useState(() => +searchParams.get("step") || 1);
-  const [userInput, setUserInput] = React.useState({
-    email: "",
-    code: "",
-    newPassword: "",
-    confirmNewPassword: "",
-    userName: null,
-    country: null,
-  });
-
+  const [searchParams, setSearchParams] = useSearchParams({ step: 1 });
+  const step = searchParams.get("step");
+  console.log(step);
   const {
     register,
     handleSubmit,
@@ -41,24 +33,17 @@ function Register() {
     getValues,
   } = useForm();
 
-  getValues();
-  const onStepHandler = (step) => {
-    setStep(step);
-    setUserInput({ userInput, ...getValues() });
-    setSearchParams({ step });
-  };
   const onSubmit = (data) => {
     setIsLoading(true);
-    axios
-      .put(
-        step === 1 ? usersURLs.register : usersURLs.verify,
-        step === 1 ? data : { email: data.email, code: data.code }
-      )
+    axios[step == 1 ? "post" : "put"](
+      step == 1 ? usersURLs.register : usersURLs.verify,
+      step == 1 ? data : { email: data.email, code: data.code }
+    )
       .then((res) => {
         toast.success(
           res?.data?.message ||
             `${
-              step === 1
+              step == 1
                 ? "A Verification Code has been sent to your inbox"
                 : "Email Verified Successfully"
             }`,
@@ -66,9 +51,7 @@ function Register() {
             position: "top-right",
           }
         );
-        if (step === 1) {
-          onStepHandler(2);
-        }
+        step == 1 ? setSearchParams({ step: 2 }) : null;
       })
       .catch((err) => {
         toast.error(`${err.response.data.message || "Something Went Wrong!"}`, {
@@ -82,19 +65,19 @@ function Register() {
     <>
       <Steps>
         <Step
-          style={{ backgroundColor: step === 1 ? "var(--green-700)" : null }}
-          onClick={() => onStepHandler(1)}
+          style={{ backgroundColor: step == 1 ? "var(--green-700)" : null }}
+          onClick={() => setSearchParams({ step: 1 })}
         >
           1
         </Step>
         <Step
-          style={{ backgroundColor: step === 2 ? "var(--green-700)" : null }}
-          onClick={() => onStepHandler(2)}
+          style={{ backgroundColor: step == 2 ? "var(--green-700)" : null }}
+          onClick={() => setSearchParams({ step: 2 })}
         >
           2
         </Step>
       </Steps>
-      {+searchParams.get("step") === 1 && (
+      {step == 1 && (
         // {step === 1 && (
         <FormWrapper onSubmit={handleSubmit(onSubmit)}>
           <header>
@@ -125,7 +108,6 @@ function Register() {
               {errors.email && <span>{errors.email.message}</span>}
             </InputWrapper>
 
-            {/* validation */}
             <InputWrapper>
               <Country size="1.5rem" />
               <input
@@ -137,7 +119,6 @@ function Register() {
               />
               {errors.country && <span>{errors.country.message}</span>}
             </InputWrapper>
-            {/* need validation regex */}
             <InputWrapper>
               <Phone size="1.5rem" />
               <input
@@ -174,7 +155,7 @@ function Register() {
         </FormWrapper>
       )}
 
-      {+searchParams.get("step") === 2 && (
+      {step == 2 && (
         // {step === 2 && (
         <FormWrapper onSubmit={handleSubmit(onSubmit)}>
           <header>
@@ -225,8 +206,6 @@ const Step = styled.span`
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  /* background-color: ${(props) =>
-    props.currentStep ? "var(--green-500)" : "var(--green-300"}; */
 
   background-color: var(--green-400);
   color: var(--grey-100);
