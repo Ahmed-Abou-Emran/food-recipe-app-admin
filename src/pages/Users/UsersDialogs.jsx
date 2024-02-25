@@ -1,6 +1,6 @@
 import React from "react";
 import { DeleteDialog, ViewDialog } from "../../ui/Dialog/Dialog";
-import { usersURL } from "../../services/END_POINTS";
+import { baseUsers } from "../../services/END_POINTS";
 import { toast } from "react-hot-toast";
 import styled from "styled-components";
 import { FaRegUserCircle as RegularUser } from "react-icons/fa";
@@ -12,7 +12,7 @@ export const DeleteUserDialog = ({ id, refetchUsers }) => {
 
   const deleteHandler = () => {
     axios
-      .delete(`${usersURL}/${id}`, {
+      .delete(`${baseUsers}/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },

@@ -11,6 +11,7 @@ import {
   EmailValidation,
   PasswordValidation,
 } from "../../../services/VALIDATIONS";
+import { usersURLs } from "../../../services/END_POINTS";
 
 export const ForgetPassword = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -30,7 +31,6 @@ export const ForgetPassword = () => {
     getValues,
   } = useForm();
 
-  getValues();
   const onStepHandler = (step) => {
     setStep(step);
     setUserInput({ userInput, ...getValues() });
@@ -39,12 +39,7 @@ export const ForgetPassword = () => {
   const onSubmit = (data) => {
     setIsLoading(true);
     axios
-      .post(
-        `https://upskilling-egypt.com/api/v1/Users/Reset/${
-          step === 1 ? "Request" : ""
-        }`,
-        data
-      )
+      .post(step === 1 ? usersURLs.resetRequest : usersURLs.reset, data)
       .then((res) => {
         toast.success(
           `${

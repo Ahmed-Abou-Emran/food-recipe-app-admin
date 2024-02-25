@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { PasswordIconInput } from "./inputs";
 import Loader from "../ui/Loader";
 import { FormDialog } from "./Dialog/Dialog";
+import { usersURLs } from "../services/END_POINTS";
 
 const ChangePasswordDialog = ({ open, setOpen }) => {
   const [loading, setLoading] = React.useState(false);
@@ -21,15 +22,11 @@ const ChangePasswordDialog = ({ open, setOpen }) => {
   const onSubmit = (data) => {
     setLoading(true);
     axios
-      .put(
-        "https://upskilling-egypt.com:443/api/v1/Users/ChangePassword",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        }
-      )
+      .put(usersURLs.changePassword, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      })
       .then((res) => {
         toast.success(res?.data?.message || "Password Changed Successfully", {
           position: "top-right",

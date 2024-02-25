@@ -14,7 +14,7 @@ import {
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { PasswordIconInput } from "../../../ui/inputs";
-import { usersURL } from "../../../services/END_POINTS";
+import { usersURLs } from "../../../services/END_POINTS";
 import {
   EmailValidation,
   PasswordValidation,
@@ -51,8 +51,7 @@ function Register() {
     setIsLoading(true);
     axios
       .put(
-        // "https://upskilling-egypt.com:443/api/v1/Users/verify",
-        `${usersURL}/${step === 1 ? "Register" : "verify"}`,
+        step === 1 ? usersURLs.register : usersURLs.verify,
         step === 1 ? data : { email: data.email, code: data.code }
       )
       .then((res) => {
@@ -273,7 +272,7 @@ const FormWrapper = styled.form`
       border-radius: 0.5rem;
     }
 
-    button[type="submit"] {
+    button {
       grid-column: 1/-1;
       padding-block: var(--spacing-30);
       margin-block: var(--spacing-100) var(--spacing-20);

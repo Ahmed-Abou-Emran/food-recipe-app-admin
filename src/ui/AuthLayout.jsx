@@ -48,7 +48,7 @@ const FormWrapper = styled.div`
   gap: var(--spacing-40);
   border-radius: 1rem;
 
-  width: clamp(30rem, 65%, 50rem);
+  width: clamp(30rem, 85%, 50rem);
   max-width: 100%;
   padding-inline: clamp(1rem, 0.2rem + 4vw, 5rem);
   padding-block: clamp(0.5rem, 1rem + 2vw, 2.5rem);

@@ -12,6 +12,7 @@ import {
   EmailValidation,
   PasswordValidation,
 } from "../../../services/VALIDATIONS";
+import { usersURLs } from "../../../services/END_POINTS";
 const LoginForm = () => {
   const [loading, setLoading] = React.useState(false);
   const { loginHandler } = useUserContext();
@@ -25,12 +26,11 @@ const LoginForm = () => {
   const onSubmit = (data) => {
     setLoading(true);
     axios
-      .post("https://upskilling-egypt.com/api/v1/Users/Login", data)
+      .post(usersURLs.login, data)
       .then((res) => {
         toast.success("Login Successfully", {
           position: "top-right",
         });
-        // const decodedData = JSON.stringify(jwtDecode(res.data.token));
         const token = res.data.token;
         loginHandler(token);
         navigate("/home");
