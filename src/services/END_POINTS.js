@@ -10,7 +10,21 @@ export const tagsURL = `${BASE_URL}/tag`;
 
 /************************************Users************************************/
 
-export const usersURL = `${BASE_URL}/Users`;
+export const baseUsers = `${BASE_URL}/Users`;
+
+export const usersURLs = {
+  login: baseUsers + "/Login",
+  register: baseUsers + "/Register",
+  verify: baseUsers + "/verify",
+  resetRequest: baseUsers + "/Reset/Request",
+  reset: baseUsers + "/Reset",
+  changePassword: baseUsers + "/ChangePassword",
+  currentUser: baseUsers + "/currentUser",
+  delete: baseUsers,
+  getUser: baseUsers,
+  getAllUsers: baseUsers,
+  updateCurrentProfile: baseUsers,
+};
 
 /************************************Recipes************************************/
 export const recipesURL = `${BASE_URL}/Recipe`;

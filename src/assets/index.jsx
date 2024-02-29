@@ -5,6 +5,7 @@ import HeaderRecipes from "./header-recipes.svg";
 import NotFound from "./notFound.svg";
 import NoData from "./NoData.svg";
 import DefaultFood from "./defaultFood.png";
+import AuthLogo from "./authLogo.png";
 export {
   DefaultFood,
   SideBarLogo,
@@ -13,4 +14,5 @@ export {
   HeaderRecipes,
   NotFound,
   NoData,
+  AuthLogo,
 };

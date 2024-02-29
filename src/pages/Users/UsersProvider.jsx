@@ -1,5 +1,5 @@
 import React from "react";
-import { usersURL } from "../../services/END_POINTS";
+import { usersURLs } from "../../services/END_POINTS";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 
@@ -48,7 +48,7 @@ export const useUsers = () => {
   const getUsers = () => {
     setIsLoading(true);
     axios
-      .get(`${usersURL}`, {
+      .get(`${usersURLs.getAllUsers}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },

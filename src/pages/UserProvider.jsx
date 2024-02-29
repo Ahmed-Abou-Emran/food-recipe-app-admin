@@ -1,6 +1,6 @@
 import React from "react";
 import { jwtDecode } from "jwt-decode";
-import { usersURL } from "../services/END_POINTS";
+import { usersURLs } from "../services/END_POINTS";
 import axios from "axios";
 export const UserContext = React.createContext();
 
@@ -22,7 +22,7 @@ const UserProvider = ({ children }) => {
   React.useEffect(() => {
     const getCurrentUserData = () => {
       axios
-        .get(`${usersURL}/currentUser`, {
+        .get(usersURLs.currentUser, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
