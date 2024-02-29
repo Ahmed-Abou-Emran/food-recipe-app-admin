@@ -172,8 +172,6 @@ const Step = styled.span`
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  /* background-color: ${(props) =>
-    props.currentStep ? "var(--green-500)" : "var(--green-300"}; */
 
   background-color: var(--green-400);
   color: var(--grey-100);
@@ -190,26 +188,10 @@ const Step = styled.span`
 `;
 
 const FormWrapper = styled.form`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: var(--spacing-80);
-
-  h1 {
-    font-weight: 600;
-    font-size: 1.5625rem;
-  }
-  p {
-    font-size: 1rem;
-    font-weight: 400;
-    color: var(--grey-400);
-  }
   main {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-70);
+    display: grid;
     width: 100%;
+    gap: var(--spacing-70);
 
     input {
       padding-inline: var(--spacing-40);

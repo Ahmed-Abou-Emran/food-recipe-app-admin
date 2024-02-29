@@ -2,18 +2,18 @@ import axios from "axios";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { FiCheckCircle as Code } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import {
   FiUser as User,
   FiGlobe as Country,
   FiPhone as Phone,
   FiMail as Email,
+  FiCheckCircle as Code,
 } from "react-icons/fi";
 
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { PasswordIconInput } from "../../../ui/inputs";
+import { ErrorIconInput, PasswordIconInput } from "../../../ui/inputs";
 import { usersURLs } from "../../../services/END_POINTS";
 import {
   EmailValidation,
@@ -77,123 +77,125 @@ function Register() {
           2
         </Step>
       </Steps>
-      {step == 1 && (
-        // {step === 1 && (
-        <FormWrapper onSubmit={handleSubmit(onSubmit)}>
-          <header>
-            <h1>Register a New User</h1>
-            <p> Please Enter Your Details !</p>
-          </header>
+      <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+        {step == 1 && (
+          <>
+            <header>
+              <h1>Register a New User</h1>
+              <p> Please Enter Your Details !</p>
+            </header>
 
-          <main>
-            {/* #todo: add image upload with avatar preview */}
-            <InputWrapper>
-              <User size="1.5rem" />
-              <input
-                {...register("userName", {
-                  required: "This field is required ",
-                })}
-                type="text"
-                placeholder="User Name"
-              />
-              {errors.userName && <span>{errors.userName.message}</span>}
-            </InputWrapper>
-            <InputWrapper>
-              <Email size="1.5rem" />
-              <input
-                {...register("email", EmailValidation)}
-                type="text"
-                placeholder="Email"
-              />
-              {errors.email && <span>{errors.email.message}</span>}
-            </InputWrapper>
+            <main>
+              {/* #todo: add image upload with avatar preview */}
+              <InputWrapper>
+                <ErrorIconInput
+                  icon={User}
+                  error={errors?.userName?.message}
+                  {...register("userName", {
+                    required: "This field is required ",
+                  })}
+                  type="text"
+                  placeholder="User Name"
+                />
+              </InputWrapper>
+              <InputWrapper>
+                <ErrorIconInput
+                  icon={Email}
+                  error={errors?.email?.message}
+                  {...register("email", EmailValidation)}
+                  type="text"
+                  placeholder="Email"
+                />
+              </InputWrapper>
 
-            <InputWrapper>
-              <Country size="1.5rem" />
-              <input
-                {...register("country", {
-                  required: "This field is required ",
-                })}
-                type="text"
-                placeholder="country"
-              />
-              {errors.country && <span>{errors.country.message}</span>}
-            </InputWrapper>
-            <InputWrapper>
-              <Phone size="1.5rem" />
-              <input
-                {...register("phoneNumber", PhoneValidation)}
-                type="text"
-                placeholder="Phone Number"
-              />
-              {errors.phoneNumber && <span>{errors.phoneNumber.message}</span>}
-            </InputWrapper>
+              <InputWrapper>
+                <ErrorIconInput
+                  icon={Country}
+                  error={errors?.country?.message}
+                  {...register("country", {
+                    required: "This field is required ",
+                  })}
+                  type="text"
+                  placeholder="country"
+                />
+              </InputWrapper>
+              <InputWrapper>
+                <ErrorIconInput
+                  icon={Phone}
+                  error={errors?.phoneNumber?.message}
+                  {...register("phoneNumber", PhoneValidation)}
+                  type="text"
+                  placeholder="Phone Number"
+                />
+              </InputWrapper>
 
-            <InputWrapper>
-              <PasswordIconInput
-                error={errors?.password?.message}
-                {...register("password", PasswordValidation)}
-                placeholder="New Password"
-              />
-            </InputWrapper>
-            <InputWrapper>
-              <PasswordIconInput
-                error={errors?.confirmPassword?.message}
-                {...register("confirmPassword", {
-                  validate: (value) =>
-                    getValues("password") === value || "Passwords don't match",
-                  ...PasswordValidation,
-                })}
-                placeholder="Confirm Password"
-              />
-            </InputWrapper>
-            <button type="submit" disabled={isLoading}>
-              {isLoading ? "Loading..." : "Register"}
-            </button>
-          </main>
-          <Login to="/login">Login instead?</Login>
-        </FormWrapper>
-      )}
+              <InputWrapper>
+                <PasswordIconInput
+                  error={errors?.password?.message}
+                  {...register("password", PasswordValidation)}
+                  placeholder="New Password"
+                />
+              </InputWrapper>
+              <InputWrapper>
+                <PasswordIconInput
+                  error={errors?.confirmPassword?.message}
+                  {...register("confirmPassword", {
+                    validate: (value) =>
+                      getValues("password") === value ||
+                      "Passwords don't match",
+                    ...PasswordValidation,
+                  })}
+                  placeholder="Confirm Password"
+                />
+              </InputWrapper>
+              <button type="submit" disabled={isLoading}>
+                {isLoading ? "Loading..." : "Register"}
+              </button>
+            </main>
+            <Login to="/login">Login instead?</Login>
+          </>
+        )}
 
-      {step == 2 && (
-        // {step === 2 && (
-        <FormWrapper onSubmit={handleSubmit(onSubmit)}>
-          <header>
-            <h1>Verify New Account</h1>
-            <p>
-              Please Enter the verification code and email to verify your
-              Account
-            </p>
-          </header>
+        {step == 2 && (
+          // {step === 2 && (
+          <>
+            <header>
+              <h1>Verify New Account</h1>
+              <p>
+                Please Enter the verification code and email to verify your
+                Account
+              </p>
+            </header>
 
-          <main>
-            <InputWrapper>
-              <Email size="1.5rem" />
-              <input
-                {...register("email", EmailValidation)}
-                type="text"
-                placeholder="Email"
-              />
-              {errors.email && <span>{errors.email.message}</span>}
-            </InputWrapper>
-            <InputWrapper>
-              <Code size="1.5rem" />
-              <input
-                {...register("code", {
-                  required: "This field is required",
-                })}
-                type="text"
-                placeholder="Verification Code"
-              />
-              {errors.code && <span>{errors.code.message}</span>}
-            </InputWrapper>
+            <main>
+              <InputWrapper>
+                <ErrorIconInput
+                  icon={Email}
+                  error={errors?.email?.message}
+                  {...register("email", EmailValidation)}
+                  type="text"
+                  placeholder="Email"
+                />
+              </InputWrapper>
+              <InputWrapper>
+                <ErrorIconInput
+                  icon={Code}
+                  error={errors?.code?.message}
+                  {...register("code", {
+                    required: "This field is required",
+                  })}
+                  type="text"
+                  placeholder="Verification Code"
+                />
+              </InputWrapper>
 
-            <button type="submit" disabled={isLoading}>
-              {isLoading ? "Loading..." : "Verify"}
-            </button>
-          </main>
-        </FormWrapper>
-      )}
+              <button type="submit" disabled={isLoading}>
+                {isLoading ? "Loading..." : "Verify"}
+              </button>
+            </main>
+          </>
+        )}
+      </FormWrapper>
     </>
   );
 }
@@ -202,7 +204,7 @@ const Steps = styled.nav`
   display: flex;
   gap: var(--spacing-40);
 `;
-const Step = styled.span`
+const Step = styled(Link)`
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
@@ -214,32 +216,18 @@ const Step = styled.span`
   justify-content: center;
   font-size: 1.25rem;
   font-weight: 700;
+  text-decoration: none;
   &:hover {
-    cursor: pointer;
     background-color: var(--green-600);
   }
   transition: background-color 0.2s ease-in-out;
 `;
 
 const FormWrapper = styled.form`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: var(--spacing-60);
-
-  h1 {
-    font-weight: 600;
-    font-size: 1.5625rem;
-  }
-  p {
-    font-size: 1rem;
-    font-weight: 400;
-    color: var(--grey-400);
-  }
   main {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+
     gap: var(--spacing-70);
     width: 100%;
 
@@ -251,14 +239,14 @@ const FormWrapper = styled.form`
       border-radius: 0.5rem;
     }
 
-    button {
+    button[type="submit"] {
       grid-column: 1/-1;
       padding-block: var(--spacing-30);
+      border-radius: 0.5rem;
       margin-block: var(--spacing-100) var(--spacing-20);
       background-color: var(--green-500);
       color: var(--grey-100);
       border: none;
-      border-radius: 0.5rem;
       text-align: center;
       font-family: Inter;
       font-size: 1.25rem;
@@ -289,9 +277,6 @@ const InputWrapper = styled.div`
   border-radius: 0.5rem;
   input {
     width: 100%;
-    &:focus {
-      outline: 2px solid var(--green-500);
-    }
 
     svg {
       position: absolute;
@@ -320,6 +305,8 @@ const InputWrapper = styled.div`
     width: 3rem;
     right: 0;
     padding-inline: var(--spacing-20);
+    padding-block: var(--spacing-30);
+    border-radius: 0.5rem;
     background: var(--green-100) !important;
     &:hover {
       cursor: pointer;

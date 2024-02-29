@@ -52,6 +52,25 @@ const FormWrapper = styled.div`
   max-width: 100%;
   padding-inline: clamp(1rem, 0.2rem + 4vw, 5rem);
   padding-block: clamp(0.5rem, 1rem + 2vw, 2.5rem);
+
+  h1 {
+    font-weight: 600;
+    font-size: 1.5625rem;
+  }
+
+  p {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--grey-400);
+  }
+
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: var(--spacing-60);
+  }
   @media (max-width: 70rem) {
     min-height: 100%;
     border-radius: revert;

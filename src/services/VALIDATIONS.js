@@ -23,7 +23,7 @@ export const PasswordValidation = {
   pattern: {
     value: PasswordRegEx,
     message:
-      " Password must be at least 6 characters, including UPPER/lowercase, numbers and special characters",
+      "At least 6 characters: UPPER/lowercase, numbers and special characters",
   },
 };
 

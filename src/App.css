@@ -160,3 +160,7 @@ h6 {
 *:disabled {
   cursor: not-allowed;
 }
+
+:focus {
+  outline: 2px solid var(--green-500);
+}

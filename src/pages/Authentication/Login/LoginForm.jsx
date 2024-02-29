@@ -81,17 +81,10 @@ const LoginForm = () => {
 };
 
 const Form = styled.form`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: var(--spacing-80);
-
   main {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-60);
+    display: grid;
     width: 100%;
+    gap: var(--spacing-60);
 
     input {
       padding-inline: var(--spacing-40);
