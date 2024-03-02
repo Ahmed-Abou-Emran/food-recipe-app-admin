@@ -55,39 +55,40 @@ const ChangePasswordDialog = ({ open, setOpen }) => {
             <p> Enter your details below</p>
           </header>
           <main>
-            <PasswordIconInput
-              error={errors?.oldPassword?.message}
-              {...register("oldPassword", {
-                required: "This field is required",
-              })}
-              placeholder="Old Password"
-            />
-            <PasswordIconInput
-              error={errors?.newPassword?.message}
-              {...register("newPassword", {
-                required: "This field is required",
-              })}
-              placeholder="New Password"
-            />
+            <InputWrapper>
+              <PasswordIconInput
+                error={errors?.oldPassword?.message}
+                {...register("oldPassword", {
+                  required: "This field is required",
+                })}
+                placeholder="Old Password"
+              />
+            </InputWrapper>
+            <InputWrapper>
+              <PasswordIconInput
+                error={errors?.newPassword?.message}
+                {...register("newPassword", {
+                  required: "This field is required",
+                })}
+                placeholder="New Password"
+              />
+            </InputWrapper>
 
-            <PasswordIconInput
-              error={errors?.confirmNewPassword?.message}
-              {...register("confirmNewPassword", {
-                required: "This field is required",
-                validate: (value) =>
-                  value === getValues("newPassword") ||
-                  "The passwords do not match",
-              })}
-              placeholder="Confirm New Password"
-            />
-
+            <InputWrapper>
+              <PasswordIconInput
+                error={errors?.confirmNewPassword?.message}
+                {...register("confirmNewPassword", {
+                  required: "This field is required",
+                  validate: (value) =>
+                    value === getValues("newPassword") ||
+                    "The passwords do not match",
+                })}
+                placeholder="Confirm New Password"
+              />
+            </InputWrapper>
             <button disabled={loading}>
               {loading ? "Loading..." : "Change Password"}
             </button>
-
-            {/* <Links>
-              <Login to="/login">Login Now?</Login>
-            </Links> */}
           </main>
         </FormWrapper>
       </Wrapper>
@@ -170,7 +171,62 @@ const FormWrapper = styled.form`
     }
   }
 `;
+const InputWrapper = styled.div`
+  background: var(--green-100);
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
 
+  gap: var(--spacing-40);
+  padding-inline-start: var(--spacing-40);
+  border-radius: 0.5rem;
+  input {
+    width: 100%;
+
+    svg {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--grey-400);
+    }
+  }
+  span {
+    padding-inline-start: var(--spacing-120);
+    position: absolute;
+    color: #ef4444;
+    font-size: 0.75rem;
+    font-weight: 500;
+    bottom: -5px;
+    transform: translateY(100%);
+  }
+
+  input + button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    position: absolute;
+    width: 3rem;
+    right: 0;
+    padding-inline: var(--spacing-20);
+    padding-block: var(--spacing-30);
+    border-radius: 0.5rem;
+    background: var(--green-100) !important;
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:focus {
+      outline: 2px solid var(--green-500);
+    }
+
+    svg {
+      color: var(--green-800);
+    }
+  }
+`;
 const Links = styled.div`
   display: flex;
   justify-content: flex-end;

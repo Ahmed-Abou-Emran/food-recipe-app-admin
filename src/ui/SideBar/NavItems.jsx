@@ -84,6 +84,7 @@ const NavItems = ({ open }) => {
         <Lock /> <span>Change Password</span>
       </button>
       <ChangePasswordDialog
+        key={openChangePassword}
         open={openChangePassword}
         setOpen={setOpenChangePassword}
       />
@@ -118,9 +119,11 @@ const Nav = styled.nav`
         padding-inline-start: 1rem;
         border: 2px solid transparent;
         &:hover,
+        &:focus,
         &.active {
           background: var(--grey-700);
           border-left: 2px solid var(--green-600);
+          outline: none;
         }
       }
 
@@ -148,10 +151,12 @@ const Nav = styled.nav`
     cursor: pointer;
     border: 2px solid transparent;
     background: none;
-    &:hover {
+    &:hover,
+    &:focus {
       overflow: hidden;
       background: var(--grey-700);
       border-left: 2px solid var(--green-600);
+      outline: none;
     }
     svg {
       flex-shrink: 0;
@@ -172,7 +177,6 @@ const NavLinkStyled = styled(NavLink)`
   font-size: 1rem;
   text-decoration: none;
   gap: 1rem;
-  transition: all 0.5s ease-in-out;
 
   span {
     display: ${({ open }) => (open ? "flex" : "none")};

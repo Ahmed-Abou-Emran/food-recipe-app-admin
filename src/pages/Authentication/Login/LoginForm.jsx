@@ -13,6 +13,9 @@ import {
   PasswordValidation,
 } from "../../../services/VALIDATIONS";
 import { usersURLs } from "../../../services/END_POINTS";
+import { formVariants } from "../formAnimations";
+import { motion } from "framer-motion";
+
 const LoginForm = () => {
   const [loading, setLoading] = React.useState(false);
   const { loginHandler } = useUserContext();
@@ -45,13 +48,21 @@ const LoginForm = () => {
       });
   };
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <header>
-        <h1>Login</h1>
-        <p> Welcome Back! Please enter your details</p>
-      </header>
-      <main>
-        <InputWrapper>
+    <Form
+      as={motion.form}
+      variants={formVariants}
+      initial="initial"
+      animate="animate"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <motion.header variants={formVariants}>
+        <motion.h1 variants={formVariants}>Login</motion.h1>
+        <motion.p variants={formVariants}>
+          Welcome Back! Please enter your details
+        </motion.p>
+      </motion.header>
+      <motion.main variants={formVariants}>
+        <InputWrapper as={motion.div} variants={formVariants}>
           <ErrorIconInput
             icon={Email}
             error={errors?.email?.message}
@@ -60,7 +71,7 @@ const LoginForm = () => {
             placeholder="Enter your email"
           />
         </InputWrapper>
-        <InputWrapper>
+        <InputWrapper as={motion.div} variants={formVariants}>
           <PasswordIconInput
             error={errors?.password?.message}
             {...register("password", PasswordValidation)}
@@ -68,14 +79,18 @@ const LoginForm = () => {
           />
         </InputWrapper>
 
-        <button disabled={loading}>
+        <motion.button variants={formVariants} disabled={loading}>
           {loading ? "Letting you In ⌛" : "Login"}
-        </button>
-        <Links>
-          <Register to="/register">Register Now</Register>
-          <Forget to="/forget-password">Forgot Password?</Forget>
+        </motion.button>
+        <Links as={motion.div} variants={formVariants}>
+          <Register variants={formVariants} to="/register">
+            Register Now
+          </Register>
+          <Forget variants={formVariants} to="/forget-password">
+            Forgot Password?
+          </Forget>
         </Links>
-      </main>
+      </motion.main>
     </Form>
   );
 };
@@ -187,12 +202,12 @@ const Links = styled.div`
     transition: text-decoration 0.2s ease-in-out;
   }
 `;
-const Register = styled(Link)`
+const Register = motion(styled(Link)`
   color: var(--green-950);
-`;
+`);
 
-const Forget = styled(Link)`
+const Forget = motion(styled(Link)`
   color: var(--green-600);
-`;
+`);
 
 export default LoginForm;
