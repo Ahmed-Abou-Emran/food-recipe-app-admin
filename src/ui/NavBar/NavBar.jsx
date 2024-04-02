@@ -5,7 +5,7 @@ import { MdNotificationsActive as Notification } from "react-icons/md";
 import { IoIosSearch as Search } from "react-icons/io";
 import { UserContext } from "../../pages/UserProvider";
 import { FaRegUserCircle as RegularUser } from "react-icons/fa";
-
+import { BASE_IMAGES } from "../../services/END_POINTS";
 function NavBar() {
   const { userData } = React.useContext(UserContext);
 
@@ -22,7 +22,7 @@ function NavBar() {
           {!userData?.imagePath ? (
             <RegularUser />
           ) : (
-            <img src={`https://upskilling-egypt.com//${userData?.imagePath}`} />
+            <img src={`${BASE_IMAGES}/${userData?.imagePath}`} />
           )}
         </ImageWrapper>
         <span>{userData?.userName || "user"}</span>

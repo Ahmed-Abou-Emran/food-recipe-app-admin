@@ -105,39 +105,26 @@ function Register() {
 
   return (
     <>
-      <Steps
-        as={motion.div}
-        variants={formVariants}
-        initial="initial"
-        animate="animate"
-      >
+      <Steps>
         <Step
-          variants={formVariants}
           style={{ backgroundColor: step == 1 ? "var(--green-700)" : null }}
           onClick={() => setSearchParams({ step: 1 })}
         >
           1
         </Step>
         <Step
-          variants={formVariants}
           style={{ backgroundColor: step == 2 ? "var(--green-700)" : null }}
           onClick={() => setSearchParams({ step: 2 })}
         >
           2
         </Step>
       </Steps>
-      <FormWrapper
-        as={motion.form}
-        variants={formVariants}
-        initial="initial"
-        animate="animate"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <motion.header key={step} variants={formVariants}>
-          <motion.h1 variants={formVariants}>
+      <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+        <motion.header key={step}>
+          <motion.h1>
             {step == 1 ? "Register a New User" : "Verify New Account"}
           </motion.h1>
-          <motion.p variants={formVariants}>
+          <motion.p>
             {step == 1
               ? " Please Enter Your Details !"
               : " Please Enter the verification code and email to verify your Account"}
@@ -145,13 +132,9 @@ function Register() {
         </motion.header>
         {step == 1 && (
           <>
-            <motion.main
-              variants={formVariants}
-              initial="initial"
-              animate="animate"
-            >
+            <motion.main>
               {/* #todo: add image upload with avatar preview */}
-              <InputWrapper as={motion.div} variants={formVariants}>
+              <InputWrapper>
                 <ErrorIconInput
                   icon={User}
                   error={errors?.userName?.message}
@@ -162,7 +145,7 @@ function Register() {
                   placeholder="User Name"
                 />
               </InputWrapper>
-              <InputWrapper as={motion.div} variants={formVariants}>
+              <InputWrapper>
                 <ErrorIconInput
                   icon={Email}
                   error={errors?.email?.message}
@@ -172,7 +155,7 @@ function Register() {
                 />
               </InputWrapper>
 
-              <InputWrapper as={motion.div} variants={formVariants}>
+              <InputWrapper>
                 <ErrorIconInput
                   icon={Country}
                   error={errors?.country?.message}
@@ -183,7 +166,7 @@ function Register() {
                   placeholder="country"
                 />
               </InputWrapper>
-              <InputWrapper as={motion.div} variants={formVariants}>
+              <InputWrapper>
                 <ErrorIconInput
                   icon={Phone}
                   error={errors?.phoneNumber?.message}
@@ -193,14 +176,14 @@ function Register() {
                 />
               </InputWrapper>
 
-              <InputWrapper as={motion.div} variants={formVariants}>
+              <InputWrapper>
                 <PasswordIconInput
                   error={errors?.password?.message}
                   {...register("password", PasswordValidation)}
                   placeholder="New Password"
                 />
               </InputWrapper>
-              <InputWrapper as={motion.div} variants={formVariants}>
+              <InputWrapper>
                 <PasswordIconInput
                   error={errors?.confirmPassword?.message}
                   {...register("confirmPassword", {
@@ -230,7 +213,7 @@ function Register() {
           // {step === 2 && (
           <>
             <motion.main variants={formVariants}>
-              <InputWrapper as={motion.div} variants={formVariants}>
+              <InputWrapper>
                 <ErrorIconInput
                   icon={Email}
                   error={errors?.email?.message}
@@ -239,7 +222,7 @@ function Register() {
                   placeholder="Email"
                 />
               </InputWrapper>
-              <InputWrapper as={motion.div} variants={formVariants}>
+              <InputWrapper>
                 <ErrorIconInput
                   icon={Code}
                   error={errors?.code?.message}

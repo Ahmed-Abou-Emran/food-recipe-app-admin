@@ -2,19 +2,13 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import AuthLogo from "../assets/authLogo.png";
-import { motion } from "framer-motion";
 import { formVariants } from "../pages/Authentication/formAnimations";
 
 function AuthLayout() {
   return (
     <AuthWrapper>
-      <FormWrapper as={motion.div} layout>
-        <LogoWrapper
-          as={motion.div}
-          variants={formVariants}
-          initial="initial"
-          animate="animate"
-        >
+      <FormWrapper>
+        <LogoWrapper>
           <Link to="/">
             <img src={AuthLogo} alt="Logo" />
           </Link>

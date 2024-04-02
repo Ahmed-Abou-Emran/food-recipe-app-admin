@@ -1,5 +1,6 @@
 /************************************Base************************************/
-export const BASE_URL = "https://upskilling-egypt.com:443/api/v1";
+export const BASE_IMAGES = "https://upskilling-egypt.com:3006";
+export const BASE_URL = "https://upskilling-egypt.com:3006/api/v1";
 
 /************************************Categories************************************/
 

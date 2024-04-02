@@ -101,23 +101,14 @@ export const ForgetPassword = () => {
 
   return (
     <>
-      <Steps
-        as={motion.div}
-        variants={formVariants}
-        initial="initial"
-        animate="animate"
-      >
+      <Steps>
         <Step
-          as={motion.button}
-          variants={formVariants}
           style={{ backgroundColor: step == 1 ? "var(--green-700)" : null }}
           onClick={() => setSearchParams({ step: 1 })}
         >
           1
         </Step>
         <Step
-          as={motion.button}
-          variants={formVariants}
           style={{ backgroundColor: step == 2 ? "var(--green-700)" : null }}
           onClick={() => setSearchParams({ step: 2 })}
         >
@@ -125,31 +116,20 @@ export const ForgetPassword = () => {
         </Step>
       </Steps>
       {/* Request Reset Password */}
-      <FormWrapper
-        as={motion.form}
-        variants={formVariants}
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <motion.header variants={formVariants}>
-          <motion.h1 variants={formVariants}>
-            {step == 1 ? "Request Reset Password" : "Reset Password"}
-          </motion.h1>
-          <motion.p variants={formVariants}>
+      <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+        <header>
+          <h1>{step == 1 ? "Request Reset Password" : "Reset Password"}</h1>
+          <p>
             {step == 1
               ? "Please Enter Your Email And Check Your Inbox"
               : "Please Enter Your OTP or Check Your Inbox"}
-          </motion.p>
-        </motion.header>
-        <motion.main
-          key={step}
-          variants={formVariants}
-          initial="initial"
-          animate="animate"
-        >
+          </p>
+        </header>
+        <main key={step} initial="initial" animate="animate">
           {step == 1 && (
             // {step === 1 && (
 
-            <InputWrapper variants={formVariants}>
+            <InputWrapper>
               <Email size="1.5rem" />
               <input
                 {...register("email", EmailValidation)}
@@ -163,7 +143,7 @@ export const ForgetPassword = () => {
           {step == 2 && (
             // Reset Password
             <>
-              <InputWrapper variants={formVariants}>
+              <InputWrapper>
                 <Email size="1.5rem" />
                 <input
                   {...register("email", EmailValidation)}
@@ -172,7 +152,7 @@ export const ForgetPassword = () => {
                 />
                 {errors.email && <span>{errors.email.message}</span>}
               </InputWrapper>
-              <InputWrapper variants={formVariants}>
+              <InputWrapper>
                 <Code size="1.5rem" />
                 <input
                   {...register("seed", {
@@ -183,14 +163,14 @@ export const ForgetPassword = () => {
                 />
                 {errors.seed && <span>{errors.seed.message}</span>}
               </InputWrapper>
-              <InputWrapper variants={formVariants}>
+              <InputWrapper>
                 <PasswordIconInput
                   error={errors?.password?.message}
                   {...register("password", PasswordValidation)}
                   placeholder="New Password"
                 />
               </InputWrapper>
-              <InputWrapper variants={formVariants}>
+              <InputWrapper>
                 <PasswordIconInput
                   error={errors?.confirmPassword?.message}
                   {...register("confirmPassword", {
@@ -204,16 +184,12 @@ export const ForgetPassword = () => {
               </InputWrapper>
             </>
           )}
-          <motion.button
-            variants={formVariants}
-            type="submit"
-            disabled={isLoading}
-          >
+          <button type="submit" disabled={isLoading}>
             {step == 1 &&
               (isLoading ? "Sending verification Code ⌛" : " Reset Password")}
             {step == 2 && (isLoading ? "Verifying your Request ⌛" : "Verify ")}
-          </motion.button>
-        </motion.main>
+          </button>
+        </main>
       </FormWrapper>
     </>
   );
