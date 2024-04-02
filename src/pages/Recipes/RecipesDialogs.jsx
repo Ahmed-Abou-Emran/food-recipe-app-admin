@@ -5,10 +5,8 @@ import { toast } from "react-hot-toast";
 import styled from "styled-components";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { useRecipes } from "./hooks";
 
 export const DeleteRecipeDialog = ({ id, refetchRecipes }) => {
-  // const { refetchRecipes } = useRecipes();
   const [open, setOpen] = React.useState(false);
 
   const deleteHandler = () => {

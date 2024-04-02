@@ -18,10 +18,19 @@ import {
   GrCaretPrevious as Previous,
 } from "react-icons/gr";
 import { IoFastFoodOutline as RecipesIcon } from "react-icons/io5";
-import { FaRegEdit as Edit } from "react-icons/fa";
 import { FiHeart as Heart } from "react-icons/fi";
 import { favoriteRecipesURL } from "../../services/END_POINTS";
+import { rowVariants } from "../../utils/animations";
+import { motion, AnimatePresence } from "framer-motion";
+import { SquarePen } from "../../assets/icons";
 
+const buttonVariants = {
+  hover: {
+    scale: 1.5,
+    prespective: 250,
+    rotateX: -30,
+  },
+};
 function Recipes() {
   const { userData } = useUserContext();
   const isAdmin = userData?.userType == "SuperAdmin";
@@ -151,51 +160,72 @@ function Recipes() {
               recipe={{ ...currentRecipe }}
             />
           )}
-          {isLoadingRecipes && <Loader />}
+          {/* {isLoadingRecipes && <Loader />} */}
           {!isLoadingRecipes && recipes.length == 0 && <NoData />}
-          {!isLoadingRecipes &&
-            recipes.length > 0 &&
-            recipes.map((recipe) => {
-              const { id, name, description, price, imagePath, category, tag } =
-                recipe;
-              return (
-                <Row key={id}>
-                  <div>{name}</div>
-                  <div>
-                    <ImageWrapper>
-                      {imagePath ? (
-                        <img
-                          src={`https://upskilling-egypt.com/${imagePath}`}
-                        />
+          <AnimatePresence mode="popLayout">
+            {recipes.length > 0 &&
+              recipes.map((recipe, index) => {
+                const {
+                  id,
+                  name,
+                  description,
+                  price,
+                  imagePath,
+                  category,
+                  tag,
+                } = recipe;
+                return (
+                  <Row
+                    as={motion.div}
+                    layout
+                    key={recipe.id}
+                    variants={rowVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                  >
+                    <div>{name}</div>
+                    <div>
+                      <ImageWrapper>
+                        {imagePath ? (
+                          <img
+                            src={`https://upskilling-egypt.com/${imagePath}`}
+                          />
+                        ) : (
+                          <RecipesIcon />
+                        )}
+                      </ImageWrapper>
+                    </div>
+                    <div>{formatCurrency(price)}</div>
+                    <div>{description}</div>
+                    <div>{category[0]?.name || "---"}</div>
+                    <div>{tag?.name || "---"}</div>
+                    <ActionsWrapper>
+                      {isAdmin ? (
+                        <>
+                          <ActionTrigger
+                            variants={buttonVariants}
+                            whileHover="hover"
+                            whileTap="tap"
+                            onClick={() => onEditHandler(id)}
+                          >
+                            <SquarePen />
+                          </ActionTrigger>
+                          <DeleteRecipeDialog
+                            refetchRecipes={refetchRecipes}
+                            id={id}
+                          />
+                        </>
                       ) : (
-                        <RecipesIcon />
-                      )}
-                    </ImageWrapper>
-                  </div>
-                  <div>{formatCurrency(price)}</div>
-                  <div>{description}</div>
-                  <div>{category[0]?.name || "---"}</div>
-                  <div>{tag?.name || "---"}</div>
-                  <ActionsWrapper>
-                    {isAdmin ? (
-                      <>
-                        <ActionTrigger onClick={() => onEditHandler(id)}>
-                          <Edit />
+                        <ActionTrigger onClick={() => addToFavorite(id)}>
+                          <Heart />
                         </ActionTrigger>
-                        <DeleteRecipeDialog
-                          refetchRecipes={refetchRecipes}
-                          id={id}
-                        />
-                      </>
-                    ) : (
-                      <ActionTrigger onClick={() => addToFavorite(id)}>
-                        <Heart />
-                      </ActionTrigger>
-                    )}
-                  </ActionsWrapper>
-                </Row>
-              );
-            })}
+                      )}
+                    </ActionsWrapper>
+                  </Row>
+                );
+              })}
+          </AnimatePresence>
         </Body>
         <Footer>
           <Pagination>
@@ -391,28 +421,17 @@ const ActionsWrapper = styled.div`
   gap: 1.5rem;
 `;
 
-const ActionTrigger = styled.button`
+const ActionTrigger = motion(styled.button`
   color: var(--grey-600);
-  /* transition: all 300ms ease-in-out; */
-  &:focus,
-  &:hover {
-  }
-  svg {
-    font-size: 1.5rem;
-    transition: all 300ms ease-in-out;
-    stroke-width: 1px;
-    &:hover {
-      color: var(--grey-800);
-      /* transform: scale(2) rotate(2turn); */
-      transform: scale(2);
-      outline: none;
-      fill: red;
-    }
-  }
   border: none;
   background: none;
+  &:hover,
+  &:focus {
+    .edit .pen {
+    }
+  }
   cursor: pointer;
-`;
+`);
 
 const ImageWrapper = styled.div`
   width: 5rem;
