@@ -1,16 +1,13 @@
 import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { ImCross as Cross } from "react-icons/im";
-import {
-  FaRegTrashAlt as Trash,
-  FaEye as Eye,
-  FaRegEdit as Edit,
-} from "react-icons/fa";
 import "./Dialog.css";
 import { NoData } from "../../assets";
 import styled from "styled-components";
-const Root = Dialog.Root;
+import { motion } from "framer-motion";
+import { Trash, ViewEye, XCircle } from "../../assets/icons";
 
+const Root = Dialog.Root;
 // will contain the button that will open the dialog
 const Trigger = Dialog.Trigger;
 
@@ -24,6 +21,11 @@ const Description = Dialog.Description;
 // will close the dialog
 const Close = Dialog.Close;
 
+const buttonVariants = {
+  hover: {
+    scale: 1.5,
+  },
+};
 const DialogDemo = () => (
   <Root>
     <Trigger asChild>
@@ -68,7 +70,12 @@ const DialogDemo = () => (
 export const DeleteDialog = ({ itemName, onDelete, open, onOpenChange }) => {
   return (
     <Wrapper open={open} onOpenChange={onOpenChange}>
-      <ActionTrigger>
+      <ActionTrigger
+        whileHover="hover"
+        whileTap="tap"
+        initial="initial"
+        variants={buttonVariants}
+      >
         <Trash />
       </ActionTrigger>
       <Portal>
@@ -89,8 +96,8 @@ export const DeleteDialog = ({ itemName, onDelete, open, onOpenChange }) => {
           </OutlineButton>
           {/* </Close> */}
           <Close asChild>
-            <CrossButton aria-label="Close">
-              <Cross />
+            <CrossButton whileHover="hover" whileTap="tap" aria-label="Close">
+              <XCircle />
             </CrossButton>
           </Close>
         </ContentWrapper>
@@ -120,16 +127,20 @@ export const FormDialog = ({ open, onOpenChange, children }) => {
 export const ViewDialog = ({ children }) => {
   return (
     <Wrapper>
-      <ActionTrigger>
-        <Eye />
+      <ActionTrigger
+        variants={buttonVariants}
+        whileHover="hover"
+        whileTap="tap"
+      >
+        <ViewEye />
       </ActionTrigger>
       <Portal>
         <Overlay className="DialogOverlay" />
         <ContentWrapper className="DialogContent">
           {children}
           <Close asChild>
-            <CrossButton aria-label="Close">
-              <Cross />
+            <CrossButton whileHover="hover" whileTap="tap" aria-label="Close">
+              <XCircle />
             </CrossButton>
           </Close>
         </ContentWrapper>
@@ -171,14 +182,14 @@ const ContentWrapper = styled(Content)`
 const FormContentWrapper = styled(ContentWrapper)`
   align-items: stretch;
 `;
-const ActionTrigger = styled(Trigger)`
+const ActionTrigger = motion(styled(Trigger)`
   color: var(--grey-600);
   transition: all 300ms ease-in-out;
   &:focus,
   &:hover {
-    color: var(--grey-800);
-    transform: scale(2);
-    outline: none;
+    .trash {
+      color: var(--red-400);
+    }
   }
   svg {
     font-size: 1.5rem;
@@ -186,13 +197,12 @@ const ActionTrigger = styled(Trigger)`
   border: none;
   background: none;
   cursor: pointer;
-`;
+`);
 const ImageWrapper = styled.div`
   height: 15rem;
   font-size: 5rem;
   color: var(--grey-400);
   img {
-    /* width: 100%; */
     height: 100%;
   }
 `;
@@ -219,29 +229,23 @@ const OutlineButton = styled.button`
 const IconButton = styled.button`
   transition: all 300ms ease-in-out;
   border-radius: 50%;
-  padding: 6px;
-  &:focus,
-  &:hover {
-    /* color: var(--red-500); */
-    transform: scale(1.2);
-    outline: none;
-  }
-  svg {
-    font-size: 1.2rem;
-  }
   background: none;
   cursor: pointer;
+  &:focus,
+  &:hover {
+    transform: scale(1.2);
+  }
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+  }
 `;
-const CrossButton = styled(IconButton)`
+const CrossButton = motion(styled(IconButton)`
   position: absolute;
   top: var(--spacing-80);
   right: var(--spacing-80);
   color: var(--red-600);
-  border: 2px solid var(--red-600);
-  &:focus,
-  &:hover {
-    color: var(--red-500);
-  }
-`;
+`);
 
 export default DialogDemo;

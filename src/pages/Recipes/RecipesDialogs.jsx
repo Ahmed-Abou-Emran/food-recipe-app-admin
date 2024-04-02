@@ -5,10 +5,8 @@ import { toast } from "react-hot-toast";
 import styled from "styled-components";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { useRecipes } from "./hooks";
 
 export const DeleteRecipeDialog = ({ id, refetchRecipes }) => {
-  // const { refetchRecipes } = useRecipes();
   const [open, setOpen] = React.useState(false);
 
   const deleteHandler = () => {
@@ -188,12 +186,6 @@ export const UpdateRecipeDialog = ({
   categories,
   refetchRecipes,
 }) => {
-  // const { refetchRecipes } = useRecipes();
-
-  //   doesn't work because tags are fetched after the update dialog has been populated
-  //   const [tags] = useTags();
-  //   const { categories } = useCategories();
-
   const formatedRecipe = {
     ...recipe,
     tagId: recipe.tag.id,
@@ -209,29 +201,40 @@ export const UpdateRecipeDialog = ({
     defaultValues: formatedRecipe,
   });
 
-  const SubmitHandler = (data) => {
-    axios
-      .put(
+  const SubmitHandler = async (data) => {
+    console.log(data);
+    let imageFile;
+    try {
+      if (data.imagePath) {
+        const imageResponse = await axios(
+          `https://upskilling-egypt.com/${data.imagePath}`,
+          { responseType: "blob" }
+        );
+        imageFile = imageResponse.data;
+
+        console.log(imageFile);
+      }
+
+      const response = await axios.put(
         `${recipesURL}/${recipe?.id}`,
-        { ...data, recipeImage: data.recipeImage[0] },
+        { ...data, recipeImage: imageFile ? imageFile : data.recipeImage[0] },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             "Content-Type": "multipart/form-data",
           },
         }
-      )
-      .then((response) => {
-        toast.success(response?.data?.message || "Recipe Updated Successfully");
-        refetchRecipes();
-        setOpen(false);
-      })
-      .catch((error) => {
-        toast.error(
-          error?.data?.data?.message ||
-            "Something Went wrong, Unable to update Recipe"
-        );
-      });
+      );
+      toast.success(response?.data?.message || "Recipe Updated Successfully");
+      refetchRecipes();
+      setOpen(false);
+    } catch (error) {
+      console.log({ error });
+      toast.error(
+        error?.data?.data?.message ||
+          "Something Went wrong, Unable to update Recipe"
+      );
+    }
   };
 
   React.useEffect(() => {
@@ -320,7 +323,7 @@ export const UpdateRecipeDialog = ({
               type="file"
               id="recipeImage"
               {...register("recipeImage", {
-                required: "This Field is Required",
+                // required: "This Field is Required",
               })}
             />
             {errors?.recipeImage && <span>{errors.recipeImage.message}</span>}

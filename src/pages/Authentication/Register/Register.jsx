@@ -10,7 +10,7 @@ import {
   FiMail as Email,
   FiCheckCircle as Code,
 } from "react-icons/fi";
-
+import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { ErrorIconInput, PasswordIconInput } from "../../../ui/inputs";
@@ -20,12 +20,13 @@ import {
   PasswordValidation,
   PhoneValidation,
 } from "../../../services/VALIDATIONS";
+import { formVariants } from "../formAnimations";
 
 function Register() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [searchParams, setSearchParams] = useSearchParams({ step: 1 });
+  const [verified, setVerified] = React.useState(false);
   const step = searchParams.get("step");
-  console.log(step);
   const {
     register,
     handleSubmit,
@@ -46,20 +47,61 @@ function Register() {
               step == 1
                 ? "A Verification Code has been sent to your inbox"
                 : "Email Verified Successfully"
-            }`,
-          {
-            position: "top-right",
-          }
+            }`
         );
-        step == 1 ? setSearchParams({ step: 2 }) : null;
+        step == 1 ? setSearchParams({ step: 2 }) : setVerified(true);
       })
       .catch((err) => {
-        toast.error(`${err.response.data.message || "Something Went Wrong!"}`, {
-          position: "top-right",
-        });
+        toast.error(`${err.response.data.message || "Something Went Wrong!"}`);
       })
       .finally(() => setIsLoading(false));
   };
+
+  if (verified)
+    return (
+      <Wrapper>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          style={{ width: "5rem", height: "5rem", color: "var(--green-500)" }}
+        >
+          <motion.path
+            initial={{ opacity: 0, pathLength: 0 }}
+            animate={{ opacity: 1, pathLength: 1 }}
+            transition={{ duration: 1.5 }}
+            d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
+          />
+          <motion.path
+            initial={{ opacity: 0, pathLength: 0 }}
+            animate={{ opacity: 1, pathLength: 1 }}
+            transition={{ duration: 1, delay: 1.5 }}
+            d="m9 11 3 3L22 4"
+          />
+        </svg>
+        <motion.h2
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 2 }}
+        >
+          Email Verified Sucessfully !
+        </motion.h2>
+        <Login
+          to="/login"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 2 }}
+        >
+          Go To Login
+        </Login>
+      </Wrapper>
+    );
 
   return (
     <>
@@ -78,14 +120,19 @@ function Register() {
         </Step>
       </Steps>
       <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+        <motion.header key={step}>
+          <motion.h1>
+            {step == 1 ? "Register a New User" : "Verify New Account"}
+          </motion.h1>
+          <motion.p>
+            {step == 1
+              ? " Please Enter Your Details !"
+              : " Please Enter the verification code and email to verify your Account"}
+          </motion.p>
+        </motion.header>
         {step == 1 && (
           <>
-            <header>
-              <h1>Register a New User</h1>
-              <p> Please Enter Your Details !</p>
-            </header>
-
-            <main>
+            <motion.main>
               {/* #todo: add image upload with avatar preview */}
               <InputWrapper>
                 <ErrorIconInput
@@ -148,26 +195,24 @@ function Register() {
                   placeholder="Confirm Password"
                 />
               </InputWrapper>
-              <button type="submit" disabled={isLoading}>
+              <motion.button
+                variants={formVariants}
+                type="submit"
+                disabled={isLoading}
+              >
                 {isLoading ? "Loading..." : "Register"}
-              </button>
-            </main>
-            <Login to="/login">Login instead?</Login>
+              </motion.button>
+            </motion.main>
+            <Login variants={formVariants} to="/login">
+              Login instead?
+            </Login>
           </>
         )}
 
         {step == 2 && (
           // {step === 2 && (
           <>
-            <header>
-              <h1>Verify New Account</h1>
-              <p>
-                Please Enter the verification code and email to verify your
-                Account
-              </p>
-            </header>
-
-            <main>
+            <motion.main variants={formVariants}>
               <InputWrapper>
                 <ErrorIconInput
                   icon={Email}
@@ -189,10 +234,14 @@ function Register() {
                 />
               </InputWrapper>
 
-              <button type="submit" disabled={isLoading}>
+              <motion.button
+                variants={formVariants}
+                type="submit"
+                disabled={isLoading}
+              >
                 {isLoading ? "Loading..." : "Verify"}
-              </button>
-            </main>
+              </motion.button>
+            </motion.main>
           </>
         )}
       </FormWrapper>
@@ -204,7 +253,7 @@ const Steps = styled.nav`
   display: flex;
   gap: var(--spacing-40);
 `;
-const Step = styled(Link)`
+const Step = motion(styled("w")`
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
@@ -221,7 +270,7 @@ const Step = styled(Link)`
     background-color: var(--green-600);
   }
   transition: background-color 0.2s ease-in-out;
-`;
+`);
 
 const FormWrapper = styled.form`
   main {
@@ -265,6 +314,18 @@ const FormWrapper = styled.form`
   }
 `;
 
+const Wrapper = styled.main`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  h2 {
+    color: var(--green-900);
+  }
+`;
 const InputWrapper = styled.div`
   background: var(--green-100);
   width: 100%;
@@ -322,7 +383,7 @@ const InputWrapper = styled.div`
   }
 `;
 
-const Login = styled(Link)`
+const Login = motion(styled(Link)`
   grid-column: -1/2;
   align-self: flex-end;
   color: var(--green-600);
@@ -334,5 +395,5 @@ const Login = styled(Link)`
   }
 
   transition: text-decoration 0.2s ease-in-out;
-`;
+`);
 export default Register;

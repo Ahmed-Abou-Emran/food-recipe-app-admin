@@ -13,6 +13,8 @@ import {
   PasswordValidation,
 } from "../../../services/VALIDATIONS";
 import { usersURLs } from "../../../services/END_POINTS";
+import { formVariants } from "../formAnimations";
+
 const LoginForm = () => {
   const [loading, setLoading] = React.useState(false);
   const { loginHandler } = useUserContext();
@@ -48,7 +50,7 @@ const LoginForm = () => {
     <Form onSubmit={handleSubmit(onSubmit)}>
       <header>
         <h1>Login</h1>
-        <p> Welcome Back! Please enter your details</p>
+        <p>Welcome Back! Please enter your details</p>
       </header>
       <main>
         <InputWrapper>
@@ -187,6 +189,7 @@ const Links = styled.div`
     transition: text-decoration 0.2s ease-in-out;
   }
 `;
+
 const Register = styled(Link)`
   color: var(--green-950);
 `;

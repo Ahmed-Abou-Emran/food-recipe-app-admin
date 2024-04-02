@@ -12,6 +12,8 @@ import { DeleteUserDialog, ViewUserDialog } from "./UsersDialogs";
 import { useUpdateParams, useUsers } from "./UsersProvider";
 import { range } from "../../utils/helpers";
 import { NoData, Loader } from "../../ui";
+import { motion, AnimatePresence } from "framer-motion";
+import { rowVariants } from "../../utils/animations";
 function Users() {
   const [params, updateParams] = useUpdateParams();
   const {
@@ -56,40 +58,47 @@ function Users() {
         </Header>
         {
           <Body>
-            {isLoadingUsers && <Loader />}
+            {/* {isLoadingUsers && <Loader />} */}
             {!isLoadingUsers && users.length == 0 && <NoData />}
-            {!isLoadingUsers &&
-              users.length > 0 &&
-              users.map((user) => (
-                <Row key={user.id}>
-                  <ImageWrapper>
-                    {user.imagePath ? (
-                      <img
-                        src={`https://upskilling-egypt.com/${user.imagePath}`}
-                      />
-                    ) : (
-                      <RegularUser />
-                    )}
-                  </ImageWrapper>
-                  <div>{user.userName}</div>
-                  <div>
-                    {user.group.name == "SystemUser"
-                      ? "System User"
-                      : "Super Admin"}
-                  </div>
-                  <ActionsWrapper>
-                    <ViewUserDialog user={user} />
-                    {user.group.name === "SystemUser" ? (
-                      <DeleteUserDialog
-                        refetchUsers={refetchUsers}
-                        id={user.id}
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </ActionsWrapper>
-                </Row>
-              ))}
+            <AnimatePresence mode="popLayout">
+              {users.length > 0 &&
+                users.map((user) => (
+                  <Row
+                    as={motion.div}
+                    exit="exit"
+                    layout
+                    variants={rowVariants}
+                    key={user.id}
+                  >
+                    <ImageWrapper>
+                      {user.imagePath ? (
+                        <img
+                          src={`https://upskilling-egypt.com/${user.imagePath}`}
+                        />
+                      ) : (
+                        <RegularUser />
+                      )}
+                    </ImageWrapper>
+                    <div>{user.userName}</div>
+                    <div>
+                      {user.group.name == "SystemUser"
+                        ? "System User"
+                        : "Super Admin"}
+                    </div>
+                    <ActionsWrapper>
+                      <ViewUserDialog user={user} />
+                      {user.group.name === "SystemUser" ? (
+                        <DeleteUserDialog
+                          refetchUsers={refetchUsers}
+                          id={user.id}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </ActionsWrapper>
+                  </Row>
+                ))}
+            </AnimatePresence>
           </Body>
         }
         <Footer>
@@ -196,7 +205,7 @@ const SearchInput = styled.input`
   border-radius: 0.5rem;
   flex-grow: 5;
 
-  &:focus {
+  &:focus-visible {
     outline: 2px solid var(--green-600);
     outline-offset: 2px;
   }
@@ -207,7 +216,7 @@ const SelectRole = styled.select`
   flex-grow: 3;
   border: 1px solid var(--green-300);
   border-radius: 0.5rem;
-  &:focus {
+  &:focus-visible {
     outline: 2px solid var(--green-600);
     outline-offset: 2px;
   }

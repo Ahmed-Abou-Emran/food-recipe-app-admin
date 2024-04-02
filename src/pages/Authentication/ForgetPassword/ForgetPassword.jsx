@@ -3,7 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { FiLock as Lock, FiMail as Email } from "react-icons/fi";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import styled from "styled-components";
 import { PasswordIconInput } from "../../../ui/inputs";
 import { FiCheckCircle as Code } from "react-icons/fi";
@@ -12,18 +12,13 @@ import {
   PasswordValidation,
 } from "../../../services/VALIDATIONS";
 import { usersURLs } from "../../../services/END_POINTS";
-
+import { motion } from "framer-motion";
+import { formVariants } from "../formAnimations";
 export const ForgetPassword = () => {
-  const [isLoading, setIsLoading] = React.useState(false);
-  let [searchParams, setSearchParams] = useSearchParams({ step: 1 });
-  const [step, setStep] = React.useState(() => +searchParams.get("step") || 1);
-  const [userInput, setUserInput] = React.useState({
-    email: "",
-    seed: "",
-    newPassword: "",
-    confirmNewPassword: "",
-  });
-
+  const [isLoading, setisLoading] = React.useState(false);
+  const [searchParams, setSearchParams] = useSearchParams({ step: 1 });
+  const step = searchParams.get("step");
+  const [verified, setVerified] = React.useState(false);
   const {
     register,
     handleSubmit,
@@ -31,66 +26,109 @@ export const ForgetPassword = () => {
     getValues,
   } = useForm();
 
-  const onStepHandler = (step) => {
-    setStep(step);
-    setUserInput({ userInput, ...getValues() });
-    setSearchParams({ step });
+  const onSubmit = async (data) => {
+    try {
+      setisLoading(true);
+      const response = axios.post(
+        step == 1 ? usersURLs.resetRequest : usersURLs.reset,
+        data
+      );
+
+      toast.success(
+        `${
+          step == 1
+            ? "OTP has been sent to your inbox"
+            : "Password has been reset Successfully"
+        }`
+      );
+      if (step == 1) {
+        setSearchParams({ step: 2 });
+      } else {
+        setVerified(true);
+      }
+    } catch (error) {
+      toast.error(`${error.response.data.message}`);
+    } finally {
+      setisLoading(false);
+    }
   };
-  const onSubmit = (data) => {
-    setIsLoading(true);
-    axios
-      .post(step === 1 ? usersURLs.resetRequest : usersURLs.reset, data)
-      .then((res) => {
-        toast.success(
-          `${
-            step === 1
-              ? "OTP has been sent to your inbox"
-              : "Password has been reset Successfully"
-          }`,
-          {
-            position: "top-right",
-          }
-        );
-        if (step === 1) {
-          onStepHandler(2);
-        } else {
-          // useNavigate("/login");
-        }
-      })
-      .catch((err) => {
-        toast.error(`${err.response.data.message}`, {
-          position: "top-right",
-        });
-      })
-      .finally(() => setIsLoading(false));
-  };
+
+  if (verified)
+    return (
+      <Wrapper>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          style={{ width: "5rem", height: "5rem", color: "var(--green-500)" }}
+        >
+          <motion.path
+            initial={{ opacity: 0, pathLength: 0 }}
+            animate={{ opacity: 1, pathLength: 1 }}
+            transition={{ duration: 1.5 }}
+            d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
+          />
+          <motion.path
+            initial={{ opacity: 0, pathLength: 0 }}
+            animate={{ opacity: 1, pathLength: 1 }}
+            transition={{ duration: 1, delay: 1.5 }}
+            d="m9 11 3 3L22 4"
+          />
+        </svg>
+        <motion.h2
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 2 }}
+        >
+          Password Reset Sucessfully !
+        </motion.h2>
+        <Login
+          to="/login"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 2 }}
+        >
+          Go To Login
+        </Login>
+      </Wrapper>
+    );
 
   return (
     <>
       <Steps>
         <Step
-          style={{ backgroundColor: step === 1 ? "var(--green-700)" : null }}
-          onClick={() => onStepHandler(1)}
+          style={{ backgroundColor: step == 1 ? "var(--green-700)" : null }}
+          onClick={() => setSearchParams({ step: 1 })}
         >
           1
         </Step>
         <Step
-          style={{ backgroundColor: step === 2 ? "var(--green-700)" : null }}
-          onClick={() => onStepHandler(2)}
+          style={{ backgroundColor: step == 2 ? "var(--green-700)" : null }}
+          onClick={() => setSearchParams({ step: 2 })}
         >
           2
         </Step>
       </Steps>
       {/* Request Reset Password */}
-      {+searchParams.get("step") === 1 && (
-        // {step === 1 && (
-        <FormWrapper onSubmit={handleSubmit(onSubmit)}>
-          <header>
-            <h1>Request Reset Password</h1>
-            <p> Please Enter Your Email And Check Your Inbox</p>
-          </header>
+      <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+        <header>
+          <h1>{step == 1 ? "Request Reset Password" : "Reset Password"}</h1>
+          <p>
+            {step == 1
+              ? "Please Enter Your Email And Check Your Inbox"
+              : "Please Enter Your OTP or Check Your Inbox"}
+          </p>
+        </header>
+        <main key={step} initial="initial" animate="animate">
+          {step == 1 && (
+            // {step === 1 && (
 
-          <main>
             <InputWrapper>
               <Email size="1.5rem" />
               <input
@@ -100,66 +138,59 @@ export const ForgetPassword = () => {
               />
               {errors.email && <span>{errors.email.message}</span>}
             </InputWrapper>
-            <button disabled={isLoading}>
-              {isLoading ? "Loading..." : "Send"}
-            </button>
-          </main>
-        </FormWrapper>
-      )}
+          )}
 
-      {+searchParams.get("step") === 2 && (
-        // Reset Password
-        <FormWrapper onSubmit={handleSubmit(onSubmit)}>
-          <header>
-            <h1> Reset Password</h1>
-            <p> Please Enter Your OTP or Check Your Inbox </p>
-          </header>
-
-          <main>
-            <InputWrapper>
-              <Email size="1.5rem" />
-              <input
-                {...register("email", EmailValidation)}
-                type="text"
-                placeholder="Email"
-              />
-              {errors.email && <span>{errors.email.message}</span>}
-            </InputWrapper>
-            <InputWrapper>
-              <Code size="1.5rem" />
-              <input
-                {...register("seed", {
-                  required: "This field is required",
-                })}
-                type="text"
-                placeholder="OTP"
-              />
-              {errors.seed && <span>{errors.seed.message}</span>}
-            </InputWrapper>
-            <InputWrapper>
-              <PasswordIconInput
-                error={errors?.password?.message}
-                {...register("password", PasswordValidation)}
-                placeholder="New Password"
-              />
-            </InputWrapper>
-            <InputWrapper>
-              <PasswordIconInput
-                error={errors?.confirmPassword?.message}
-                {...register("confirmPassword", {
-                  validate: (value) =>
-                    getValues("password") === value || "Passwords don't match",
-                  ...PasswordValidation,
-                })}
-                placeholder="Confirm New Password"
-              />
-            </InputWrapper>
-            <button disabled={isLoading}>
-              {isLoading ? "Loading..." : "Reset Password"}
-            </button>
-          </main>
-        </FormWrapper>
-      )}
+          {step == 2 && (
+            // Reset Password
+            <>
+              <InputWrapper>
+                <Email size="1.5rem" />
+                <input
+                  {...register("email", EmailValidation)}
+                  type="text"
+                  placeholder="Email"
+                />
+                {errors.email && <span>{errors.email.message}</span>}
+              </InputWrapper>
+              <InputWrapper>
+                <Code size="1.5rem" />
+                <input
+                  {...register("seed", {
+                    required: "This field is required",
+                  })}
+                  type="text"
+                  placeholder="OTP"
+                />
+                {errors.seed && <span>{errors.seed.message}</span>}
+              </InputWrapper>
+              <InputWrapper>
+                <PasswordIconInput
+                  error={errors?.password?.message}
+                  {...register("password", PasswordValidation)}
+                  placeholder="New Password"
+                />
+              </InputWrapper>
+              <InputWrapper>
+                <PasswordIconInput
+                  error={errors?.confirmPassword?.message}
+                  {...register("confirmPassword", {
+                    validate: (value) =>
+                      getValues("password") === value ||
+                      "Passwords don't match",
+                    ...PasswordValidation,
+                  })}
+                  placeholder="Confirm New Password"
+                />
+              </InputWrapper>
+            </>
+          )}
+          <button type="submit" disabled={isLoading}>
+            {step == 1 &&
+              (isLoading ? "Sending verification Code ⌛" : " Reset Password")}
+            {step == 2 && (isLoading ? "Verifying your Request ⌛" : "Verify ")}
+          </button>
+        </main>
+      </FormWrapper>
     </>
   );
 };
@@ -168,7 +199,7 @@ const Steps = styled.nav`
   display: flex;
   gap: var(--spacing-40);
 `;
-const Step = styled.span`
+const Step = styled.button`
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
@@ -184,9 +215,23 @@ const Step = styled.span`
     cursor: pointer;
     background-color: var(--green-600);
   }
+  &:focus {
+    outline-offset: 2px;
+  }
   transition: background-color 0.2s ease-in-out;
 `;
-
+const Wrapper = styled.main`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  h2 {
+    color: var(--green-900);
+  }
+`;
 const FormWrapper = styled.form`
   main {
     display: grid;
@@ -226,7 +271,7 @@ const FormWrapper = styled.form`
   }
 `;
 
-const InputWrapper = styled.div`
+const InputWrapper = motion(styled.div`
   background: var(--green-100);
   width: 100%;
   position: relative;
@@ -266,8 +311,8 @@ const InputWrapper = styled.div`
     align-items: center;
     border: none;
     position: absolute;
-    width: 3rem;
     right: 0;
+    width: 3rem;
     padding-inline: var(--spacing-20);
     background: var(--green-100) !important;
     &:hover {
@@ -282,4 +327,19 @@ const InputWrapper = styled.div`
       color: var(--green-800);
     }
   }
-`;
+`);
+
+const Login = motion(styled(Link)`
+  align-self: flex-end;
+  color: var(--green-600);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+    outline: none;
+  }
+
+  transition: text-decoration 0.2s ease-in-out;
+`);

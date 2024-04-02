@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import AuthLogo from "../assets/authLogo.png";
+import { formVariants } from "../pages/Authentication/formAnimations";
+
 function AuthLayout() {
   return (
     <AuthWrapper>
@@ -52,7 +54,7 @@ const FormWrapper = styled.div`
   max-width: 100%;
   padding-inline: clamp(1rem, 0.2rem + 4vw, 5rem);
   padding-block: clamp(0.5rem, 1rem + 2vw, 2.5rem);
-
+  /* overflow: hidden; */
   h1 {
     font-weight: 600;
     font-size: 1.5625rem;
