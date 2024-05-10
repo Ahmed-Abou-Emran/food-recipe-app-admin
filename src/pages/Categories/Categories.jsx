@@ -39,6 +39,12 @@ function Categories() {
     updateParams({ pageNumber: 1, name: e.target.value });
   };
 
+  console.log({
+    categories: typeof categories,
+    totalNumberOfPages: typeof totalNumberOfPages,
+    refetchCategories: typeof refetchCategories,
+    isLoading: typeof isLoadingCategories,
+  });
   return (
     <Wrapper>
       <AddNewItemWrapper>

@@ -20,20 +20,23 @@ import { AppLayout, AuthLayout } from "./ui";
 import RecipesProvider from "./pages/Recipes/RecipesProvider";
 import FavoriteRecipesProvider from "./pages/Favorites/FavoritesProvider";
 
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./react-query/queryClient";
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <ProtectedRoute>
-        <UsersProvider>
-          <RecipesProvider>
-            <FavoriteRecipesProvider>
-              <CategoriesProvider>
-                <AppLayout />
-              </CategoriesProvider>
-            </FavoriteRecipesProvider>
-          </RecipesProvider>
-        </UsersProvider>
+        {/* <UsersProvider> */}
+        <RecipesProvider>
+          <FavoriteRecipesProvider>
+            <CategoriesProvider>
+              <AppLayout />
+            </CategoriesProvider>
+          </FavoriteRecipesProvider>
+        </RecipesProvider>
+        {/* </UsersProvider> */}
       </ProtectedRoute>
     ),
     errorElement: <NotFound />,
@@ -76,8 +79,11 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <Toaster position="top right" />
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools />
+        <Toaster position="top right" />
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </>
   );
 }

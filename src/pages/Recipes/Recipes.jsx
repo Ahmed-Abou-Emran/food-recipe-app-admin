@@ -21,7 +21,7 @@ import { IoFastFoodOutline as RecipesIcon } from "react-icons/io5";
 import { FaRegEdit as Edit } from "react-icons/fa";
 import { FiHeart as Heart } from "react-icons/fi";
 import { favoriteRecipesURL } from "../../services/END_POINTS";
-
+import { useUsers } from "../Users/hooks";
 function Recipes() {
   const { userData } = useUserContext();
   const isAdmin = userData?.userType == "SuperAdmin";
@@ -165,7 +165,7 @@ function Recipes() {
                     <ImageWrapper>
                       {imagePath ? (
                         <img
-                          src={`https://upskilling-egypt.com/${imagePath}`}
+                          src={`https://upskilling-egypt.com:3006/${imagePath}`}
                         />
                       ) : (
                         <RecipesIcon />

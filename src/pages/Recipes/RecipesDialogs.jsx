@@ -58,29 +58,30 @@ export const AddRecipeDialog = ({
     formState: { errors },
   } = useForm();
 
-  const SubmitHandler = (data) => {
-    axios
-      .post(
+  const SubmitHandler = async (data) => {
+    try {
+      const response = await axios.post(
         `${recipesURL}`,
-        { ...data, recipeImage: data.recipeImage[0] },
+        {
+          ...data,
+          recipeImage: data.recipeImage[0],
+        },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             "Content-Type": "multipart/form-data",
           },
         }
-      )
-      .then((response) => {
-        toast.success(response?.data?.message || "Recipe Added Successfully");
-        setOpen(false);
-        refetchRecipes();
-      })
-      .catch((error) => {
-        toast.error(
-          error?.data?.data?.message ||
-            "Something Went wrong, Unable to add a New Recipe"
-        );
-      });
+      );
+      toast.success(response?.data?.message || "Recipe Added Successfully");
+      setOpen(false);
+      refetchRecipes();
+    } catch (error) {
+      toast.error(
+        error?.data?.data?.message ||
+          "Something Went wrong, Unable to add a New Recipe"
+      );
+    }
   };
   return (
     <FormDialog open={open} onOpenChange={setOpen}>
@@ -165,7 +166,7 @@ export const AddRecipeDialog = ({
               type="file"
               id="recipeImage"
               {...register("recipeImage", {
-                required: "This Field is Required",
+                // required: "This Field is Required",
               })}
             />
             {errors?.recipeImage && <span>{errors.recipeImage.message}</span>}
@@ -208,30 +209,47 @@ export const UpdateRecipeDialog = ({
   } = useForm({
     defaultValues: formatedRecipe,
   });
+  const osama = "osama";
 
-  const SubmitHandler = (data) => {
-    axios
-      .put(
+  const SubmitHandler = async (data) => {
+    console.log(data);
+    try {
+      let imageResponse = "";
+      if (data.imagePath) {
+        imageResponse = await axios.get(
+          `https://upskilling-egypt.com:3006/${data.imagePath}`,
+          {
+            responseType: "blob",
+          }
+        );
+      }
+
+      const imageBlob = imageResponse.data;
+
+      console.log(imageBlob);
+      const response = await axios.put(
         `${recipesURL}/${recipe?.id}`,
-        { ...data, recipeImage: data.recipeImage[0] },
+        {
+          ...data,
+
+          recipeImage: data.recipeImage[0] ? data.recipeImage[0] : imageBlob,
+        },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             "Content-Type": "multipart/form-data",
           },
         }
-      )
-      .then((response) => {
-        toast.success(response?.data?.message || "Recipe Updated Successfully");
-        refetchRecipes();
-        setOpen(false);
-      })
-      .catch((error) => {
-        toast.error(
-          error?.data?.data?.message ||
-            "Something Went wrong, Unable to update Recipe"
-        );
-      });
+      );
+      toast.success(response?.data?.message || "Recipe Updated Successfully");
+      refetchRecipes();
+      setOpen(false);
+    } catch (error) {
+      toast.error(
+        error?.data?.data?.message ||
+          "Something Went wrong, Unable to update Recipe"
+      );
+    }
   };
 
   React.useEffect(() => {
@@ -320,7 +338,7 @@ export const UpdateRecipeDialog = ({
               type="file"
               id="recipeImage"
               {...register("recipeImage", {
-                required: "This Field is Required",
+                // required: "This Field is Required",
               })}
             />
             {errors?.recipeImage && <span>{errors.recipeImage.message}</span>}

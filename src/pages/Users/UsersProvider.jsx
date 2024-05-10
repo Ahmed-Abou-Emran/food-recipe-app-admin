@@ -15,6 +15,7 @@ const UsersProvider = ({ children }) => {
     groups: searchParams.get("groups") || "",
   });
 
+  console.log({ searchParams: typeof searchParams, users: typeof users });
   const updateParams = ({
     userName = params.userName,
     groups = params.groups,

@@ -1,25 +1,41 @@
-import axios from "axios";
 import React from "react";
 import { FaRegUserCircle as RegularUser } from "react-icons/fa";
 import {
   GrCaretNext as Next,
   GrCaretPrevious as Previous,
 } from "react-icons/gr";
-
+import { BASE_IMAGES } from "../../services/END_POINTS";
 import styled from "styled-components";
 
 import { DeleteUserDialog, ViewUserDialog } from "./UsersDialogs";
-import { useUpdateParams, useUsers } from "./UsersProvider";
+
+import { useUsers } from "./hooks";
 import { range } from "../../utils/helpers";
 import { NoData, Loader } from "../../ui";
+import { useSearchParams } from "react-router-dom";
 function Users() {
-  const [params, updateParams] = useUpdateParams();
+  const [searchParams, setSearchParams] = useSearchParams({
+    pageSize: 5,
+    pageNumber: 1,
+    userName: "",
+    groups: "",
+  });
+
+  const params = {
+    pageSize: +searchParams.get("pageSize"),
+    pageNumber: +searchParams.get("pageNumber"),
+    userName: searchParams.get("userName"),
+    groups: searchParams.get("groups"),
+  };
+  console.log(params);
+
   const {
     users,
-    totalNumberOfPages,
-    refetchUsers,
     isLoading: isLoadingUsers,
-  } = useUsers();
+    totalNumberOfPages,
+  } = useUsers(params);
+
+  console.log({ users, isLoading: isLoadingUsers });
   return (
     <Wrapper>
       <AddNewItemWrapper>
@@ -32,14 +48,22 @@ function Users() {
         <SearchInput
           value={params?.userName}
           onChange={(e) =>
-            updateParams({ pageNumber: 1, userName: e.target.value })
+            setSearchParams({
+              ...params,
+              pageNumber: 1,
+              userName: e.target.value,
+            })
           }
           placeholder="Search By User Name"
         />
         <SelectRole
           value={params?.groups}
           onChange={(e) =>
-            updateParams({ pageNumber: 1, groups: e.target.value })
+            setSearchParams({
+              ...params,
+              pageNumber: 1,
+              groups: e.target.value,
+            })
           }
         >
           <option value="">All Roles</option>
@@ -57,16 +81,14 @@ function Users() {
         {
           <Body>
             {isLoadingUsers && <Loader />}
-            {!isLoadingUsers && users.length == 0 && <NoData />}
+            {!isLoadingUsers && users?.length == 0 && <NoData />}
             {!isLoadingUsers &&
-              users.length > 0 &&
-              users.map((user) => (
+              users?.length > 0 &&
+              users?.map((user) => (
                 <Row key={user.id}>
                   <ImageWrapper>
                     {user.imagePath ? (
-                      <img
-                        src={`https://upskilling-egypt.com/${user.imagePath}`}
-                      />
+                      <img src={`${BASE_IMAGES}/${user.imagePath}`} />
                     ) : (
                       <RegularUser />
                     )}
@@ -81,7 +103,7 @@ function Users() {
                     <ViewUserDialog user={user} />
                     {user.group.name === "SystemUser" ? (
                       <DeleteUserDialog
-                        refetchUsers={refetchUsers}
+                        // refetchUsers={refetchUsers}
                         id={user.id}
                       />
                     ) : (
@@ -96,7 +118,10 @@ function Users() {
           <Pagination>
             <Page
               onClick={() =>
-                updateParams({ pageNumber: +params.pageNumber - 1 })
+                setSearchParams({
+                  ...params,
+                  pageNumber: +params.pageNumber - 1,
+                })
               }
               disabled={params.pageNumber == 1 ? true : false}
               style={
@@ -112,7 +137,7 @@ function Users() {
             </Page>
             {range(1, +totalNumberOfPages + 1).map((i) => (
               <Page
-                onClick={() => updateParams({ pageNumber: i })}
+                onClick={() => setSearchParams({ ...params, pageNumber: i })}
                 disabled={params.pageNumber == i}
                 style={{
                   backgroundColor:
@@ -125,7 +150,10 @@ function Users() {
             ))}
             <Page
               onClick={() =>
-                updateParams({ pageNumber: +params.pageNumber + 1 })
+                setSearchParams({
+                  ...params,
+                  pageNumber: +params.pageNumber + 1,
+                })
               }
               disabled={params.pageNumber == totalNumberOfPages ? true : false}
               style={
@@ -146,7 +174,11 @@ function Users() {
             placeholder="Enter Page Size"
             value={params.pageSize}
             onChange={(e) =>
-              updateParams({ pageNumber: 1, pageSize: e.target.value })
+              setSearchParams({
+                ...params,
+                pageNumber: 1,
+                pageSize: e.target.value,
+              })
             }
           ></PageSize>
         </Footer>

@@ -7,6 +7,7 @@ import { useUserContext } from "./UserProvider";
 function Home() {
   const { userData } = useUserContext();
   const action = userData?.userType === "SuperAdmin" ? "Fill" : "View";
+
   return (
     <>
       <Wrapper>
